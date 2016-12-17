@@ -23,7 +23,12 @@
 	<!-- Adds link to admin page -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
-		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.AdminList</class>
+		<class>@MODULE_PACKAGE@.extension.html.AdminList</class>
+	</extension>
+         
+	<extension>
+		<point>org.openmrs.gutter.tools</point>
+		<class>@MODULE_PACKAGE@.extension.html.CaseSummaryHeader</class>
 	</extension>
 	
 	<!-- Maps hibernate file's, if present -->
