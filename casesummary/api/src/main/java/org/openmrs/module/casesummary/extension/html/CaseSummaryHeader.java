@@ -17,6 +17,7 @@ public class CaseSummaryHeader extends Extension {
     public MEDIA_TYPE getMediaType() {
         return MEDIA_TYPE.html;
     }
+
     public String getRequiredPrivilege() {
         return "Access Case Summary";
     }
@@ -26,6 +27,6 @@ public class CaseSummaryHeader extends Extension {
     }
 
     public String getUrl() {
-        return "/module/casesummary/manage.form";
+        return "/module/casesummary/main.form";
     }
 }
