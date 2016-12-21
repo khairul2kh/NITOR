@@ -11,11 +11,14 @@
  */
 package org.openmrs.module.casesummary.web.controller;
 
+import java.util.Date;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.casesummary.api.CaseSummaryService;
+import org.openmrs.module.casesummary.model.DoctorProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class CaseSummaryManageController {
 
     protected final Log log = LogFactory.getLog(getClass());
+    CaseSummaryService css = Context.getService(CaseSummaryService.class);
 
     @RequestMapping(value = "/module/casesummary/manage", method = RequestMethod.GET)
     public void manage(ModelMap model) {
@@ -38,10 +42,23 @@ public class CaseSummaryManageController {
     @RequestMapping(value = "/module/casesummary/main.form", method = RequestMethod.GET)
     public String mainPage(Map<String, Object> map, Model model) {
         map.put("user", Context.getAuthenticatedUser());
-        
+
         User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
 
         return "module/casesummary/main/mainpage";
+    }
+
+    @RequestMapping(value = "/module/casesummary/addDoctor.htm", method = RequestMethod.POST)
+    public String createDocProfile( // @ModelAttribute("birthRegistration") BirthRegistration birthRegistration, 
+            //        BindingResult result
+            ) {
+
+         DoctorProfile dp=new DoctorProfile();
+         dp.setCreatedDate(new Date());
+         css.saveDocPro(dp);
+
+        return "/module/casesummary/main.from";
+
     }
 }

@@ -111,7 +111,8 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu" role="menu" >
-                                <li><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+                                <li><a role="menuitem" tabindex="-1" href="" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
+                                        Add Doctor Profile</a></li>
                                 <li  ><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
                                 <li  ><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
                                 <li role="presentation" class="divider"></li>
@@ -125,9 +126,10 @@
         </nav> 
         <br><br>
 
-        <br>
-        <div class="container theme-showcase " role="main">
-            <div class="page-header"></div>
+        <div class="container theme-showcase" role="main">
+            <div class="page-header">
+                <h1> Text </h1>
+            </div>
             <div class="row">
                 <div class="col-sm-2"><div>  </div>   </div>
                 <div class="col-sm-3">
@@ -136,7 +138,16 @@
                             <input type="button" style="text-align:left;"  value="Add Doctor Profile" class="form-control btn btn-success " 
                                    data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false" />
                             <span class = "input-group-addon btn" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
-                                <i class="fa fa-user-md" style="color:green;" aria-hidden="true"></i>
+                                <i class="fa fa-user-md green"   aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <input type="button" style="text-align:left;"  value="Add Patient" class="form-control btn btn-success" 
+                                   data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false" />
+                            <span class = "input-group-addon btn" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
+                                <i class="fa fa-user-o green" aria-hidden="true"></i>
+
                             </span>
                         </div>
                         <br>
@@ -144,7 +155,7 @@
                             <input type="button" style="text-align:left;"  value="Add Slide" class="form-control btn btn-success" 
                                    data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false" />
                             <span class = "input-group-addon btn" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
-                                <i class="fa fa-plus-square fa-1x" aria-hidden="true" style="color:green"></i>
+                                <i class="fa fa-plus-square fa-1x green" aria-hidden="true" ></i>
                             </span>
                         </div>
                     </div>
@@ -152,7 +163,7 @@
                 <div class="col-sm-2"><div>  </div>   </div>
             </div>
             <div class="page-header"></div> 
-        </div> 
+        </div>  
 
         <!-- Modal Doctor Profile -->
         <div class="modal fade" id="myModal" role="dialog">
@@ -163,34 +174,40 @@
                         <h2 class="modal-title">Create Doctor Profile</h2>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal" role="form">
+                        <form class="form-horizontal" role="form" method="POST" action="addDoctor.htm">
                             <div class="form-group">
                                 <label class="control-label col-sm-3"  >Doctor Name :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="newUser.username">
+                                    <input type="text" class="form-control" ng-model="docName" id="docName" name="docName" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-3"  >Email</label>
+                                <label class="control-label col-sm-3"  >Designation</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="newUser.email" >
+                                    <input type="text" class="form-control" ng-model="designation" id="designation" name="designation" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-3"  >Full Name</label>
+                                <label class="control-label col-sm-3"  >Course</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="newUser.fullname"/>
+                                    <input type="text" class="form-control" ng-model="course" id="course" name="course" />
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3"  >Session</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="session" id="session" name="session" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+                                </button>
+                                <button type="submit"  class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                                </button>
+                            </div>
                         </form>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
-                        </button>
-                        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
-                        </button>
                     </div>
 
                     <!-- <button type="submit" class="btn btn-default" ng-click="saveUser()" data-dismiss="modal">Save</button> -->

@@ -16,7 +16,9 @@ package org.openmrs.module.casesummary.api.db.hibernate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
+import org.openmrs.api.db.DAOException;
 import org.openmrs.module.casesummary.api.db.CaseSummaryDAO;
+import org.openmrs.module.casesummary.model.DoctorProfile;
 
 /**
  * It is a default implementation of  {@link CaseSummaryDAO}.
@@ -25,18 +27,21 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
 	protected final Log log = LogFactory.getLog(this.getClass());
 	
 	private SessionFactory sessionFactory;
-	
-	/**
-     * @param sessionFactory the sessionFactory to set
-     */
+	 
     public void setSessionFactory(SessionFactory sessionFactory) {
 	    this.sessionFactory = sessionFactory;
     }
     
-	/**
-     * @return the sessionFactory
-     */
+	 
     public SessionFactory getSessionFactory() {
 	    return sessionFactory;
     }
+
+    @Override
+    public DoctorProfile saveDocPro(DoctorProfile doctorProfile) throws DAOException {
+        sessionFactory.getCurrentSession().saveOrUpdate(doctorProfile);
+        return doctorProfile;
+    }
+
+    
 }

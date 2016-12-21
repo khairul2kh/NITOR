@@ -13,24 +13,14 @@
  */
 package org.openmrs.module.casesummary.api;
 
+import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.casesummary.model.DoctorProfile;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This service exposes module's core functionality. It is a Spring managed bean which is configured in moduleApplicationContext.xml.
- * <p>
- * It can be accessed only via Context:<br>
- * <code>
- * Context.getService(CaseSummaryService.class).someMethod();
- * </code>
- * 
- * @see org.openmrs.api.context.Context
- */
+ 
 @Transactional
 public interface CaseSummaryService extends OpenmrsService {
-     
-	/*
-	 * Add service methods here
-	 * 
-	 */
+      public DoctorProfile saveDocPro(DoctorProfile doctorProfile)throws APIException;
+      
 }

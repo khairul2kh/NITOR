@@ -16,8 +16,10 @@ package org.openmrs.module.casesummary.api.impl;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.APIException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.api.db.CaseSummaryDAO;
+import org.openmrs.module.casesummary.model.DoctorProfile;
 
 /**
  * It is a default implementation of {@link CaseSummaryService}.
@@ -28,17 +30,18 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
 	
 	private CaseSummaryDAO dao;
 	
-	/**
-     * @param dao the dao to set
-     */
     public void setDao(CaseSummaryDAO dao) {
 	    this.dao = dao;
     }
     
-    /**
-     * @return the dao
-     */
-    public CaseSummaryDAO getDao() {
+     public CaseSummaryDAO getDao() {
 	    return dao;
     }
+
+    @Override
+    public DoctorProfile saveDocPro(DoctorProfile doctorProfile) throws APIException {
+        return dao.saveDocPro(doctorProfile);
+    }
+
+    
 }

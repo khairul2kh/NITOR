@@ -27,6 +27,6 @@ public class CaseSummaryHeader extends Extension {
     }
 
     public String getUrl() {
-        return "/module/casesummary/main.form";
+        return "module/casesummary/main.form";
     }
 }
