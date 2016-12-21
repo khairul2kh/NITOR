@@ -82,9 +82,33 @@
                 font-size: 16px;
             }
         </style>
+        <script>
+            var myApp = angular.module("myApp", []);
+            myApp.controller("myController", function($scope) {
+
+                $scope.newUser = {};
+                $scope.clickedUser = {};
+                $scope.users = [
+                    {username: "khairul", fullname: "Hasan Zamil", email: "jakir@gmail.com"},
+                    {username: "Mahbub", fullname: "Zakir Hossain", email: "abc@gmail.com"},
+                    {username: "Shimul", fullname: "AZM Mahmud", email: "Mahmud@gmail.com"}
+                ];
+
+                $scope.saveUser = function() {
+                    $scope.users.push($scope.newUser);
+                    $scope.newUser = {};
+                };
+
+                $scope.selectUser = function(user) {
+                    console.log(user);
+                };
+
+            });
+
+        </script>
     </head>
 
-    <body ng-app  class="ng-cloak tdn">
+    <body ng-app="myApp"  class="ng-cloak tdn">
         <!-- <nav class="navbar navbar-default navbar-fixed-top"> -->
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">     
             <div class="container">
@@ -178,7 +202,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3"  >Doctor Name :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="docName" id="docName" name="docName" />
+                                    <input type="text" class="form-control" ng-model="doctorName" id="doctorName" name="doctorName" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -203,14 +227,14 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
                                     <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
                                 </button>
-                                <button type="submit"  class="btn btn-primary">
+                                <button type="submit"  class="btn btn-primary" data-dismiss="modal">
                                     <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
                                 </button>
                             </div>
                         </form>
                     </div>
 
-                    <!-- <button type="submit" class="btn btn-default" ng-click="saveUser()" data-dismiss="modal">Save</button> -->
+                    <button type="submit" class="btn btn-default" ng-click="saveUser()" data-dismiss="modal">Save</button>  
 
                 </div>
             </div>
@@ -244,6 +268,7 @@
             $(this).closest('li').addClass('active');
         });
     </script>
+
 </body>
 <%@ include file="/WEB-INF/template/footer.jsp"%>
 </html>

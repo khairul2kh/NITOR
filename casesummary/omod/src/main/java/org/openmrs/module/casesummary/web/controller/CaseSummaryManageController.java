@@ -19,9 +19,12 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -32,7 +35,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class CaseSummaryManageController {
 
     protected final Log log = LogFactory.getLog(getClass());
-    CaseSummaryService css = Context.getService(CaseSummaryService.class);
+
+    //CaseSummaryService css = Context.getService(CaseSummaryService.class);
+    @Autowired
+    CaseSummaryService caseSumService;
 
     @RequestMapping(value = "/module/casesummary/manage", method = RequestMethod.GET)
     public void manage(ModelMap model) {
@@ -50,15 +56,40 @@ public class CaseSummaryManageController {
     }
 
     @RequestMapping(value = "/module/casesummary/addDoctor.htm", method = RequestMethod.POST)
-    public String createDocProfile( // @ModelAttribute("birthRegistration") BirthRegistration birthRegistration, 
-            //        BindingResult result
-            ) {
+    public String createDocProfile(@ModelAttribute("birthRegistration") DoctorProfile doctorProfile,
+            BindingResult result) {
 
-         DoctorProfile dp=new DoctorProfile();
-         dp.setCreatedDate(new Date());
-         css.saveDocPro(dp);
+        doctorProfile.setCreatedDate(new Date());
+        caseSumService.saveDocPro(doctorProfile);
 
         return "/module/casesummary/main.from";
 
     }
+
+//    @RequestMapping(value = "/module/casesummary/createDoctor.htm", method = RequestMethod.POST)
+//    public ResponseEntity<Void> createUser(@RequestBody DoctorProfile doctorProfile, UriComponentsBuilder ucBuilder) {
+//        //System.out.println("Creating User " + user.getUsername());
+//
+//        if (userService.isUserExist(user)) {
+//            System.out.println("A User with name " + user.getUsername() + " already exist");
+//            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+//        }
+//
+//        userService.saveUser(user);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
+//        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+//    }
 }
+
+/*
+public String addCerficate(@ModelAttribute("birthRegistration") 
+BirthRegistration birthRegistration, BindingResult result) {
+        User u = Context.getAuthenticatedUser();
+        birthRegistration.setCreator(u);
+        birthRegistration.setCreatedDate(new Date());
+        birthCertificateService.addbirthCertificate(birthRegistration);
+        return "redirect:/module/birthcertificate/birthView.htm?id=" + birthRegistration.getId();
+    }
+*/

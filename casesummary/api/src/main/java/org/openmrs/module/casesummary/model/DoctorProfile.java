@@ -3,21 +3,34 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.openmrs.module.casesummary.model;
 
 import java.util.Date;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+ 
 /**
  *
  * @author Khairul
  */
+@Entity
+@Table(name = "cs_doc_profile")
 public class DoctorProfile {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String doctorName;
     private String designation;
     private String course;
     private String session;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
 
     public int getId() {
@@ -67,5 +80,5 @@ public class DoctorProfile {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
-    
+
 }
