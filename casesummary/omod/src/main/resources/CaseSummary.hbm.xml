@@ -17,6 +17,8 @@
         <property name="course" column="course" />
         <property name="session" column="session" />
         <property name="createdDate" column="created_date" />
+        <many-to-one name="user" column="user_id" class="org.openmrs.User"
+        foreign-key="fk_cs_doc_profile_user_id" />
         
         <!--        <many-to-one name="creator" column="creator" class="org.openmrs.User"
         foreign-key="fk_birth_reg_user" />-->

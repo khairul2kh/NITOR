@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import org.openmrs.User;
  
 /**
  *
@@ -32,6 +33,15 @@ public class DoctorProfile {
     private String session;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public int getId() {
         return id;

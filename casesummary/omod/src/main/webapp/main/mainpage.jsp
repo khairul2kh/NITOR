@@ -82,30 +82,82 @@
                 font-size: 16px;
             }
         </style>
+
+
         <script>
             var myApp = angular.module("myApp", []);
-            myApp.controller("myController", function($scope) {
 
-                $scope.newUser = {};
-                $scope.clickedUser = {};
-                $scope.users = [
-                    {username: "khairul", fullname: "Hasan Zamil", email: "jakir@gmail.com"},
-                    {username: "Mahbub", fullname: "Zakir Hossain", email: "abc@gmail.com"},
-                    {username: "Shimul", fullname: "AZM Mahmud", email: "Mahmud@gmail.com"}
-                ];
+            myApp.controller('UserController', ['$scope', '$http', function($scope, $http) {
+                    $scope.messages = [];
+                    // AngularJS will populate this object with input
+                    // values based on the data-ng-model mappings.
+                    $scope.data = {};
+                    $scope.submit = function() {
+                        $http({
+                            method: 'POST',
+                            url: getContextPath() + '/module/casesummary/createDoctor.htm',
+                            data: $scope.data
+                        }).
+                                success(function(data, status, headers) {
+                                    //$window.location.replace(getContextPath() +'/module/casesummary/createDoctor.htm');
+                                }).
+                                error(function(data, status, headers) {
+                                    if (status == 400) {
+                                        $scope.messages = data;
+                                    } else {
+                                        alert('Unexpected server error.' + status + "..." + data);
+                                        //$scope.docorProfile.push(data);
+                                    }
+                                });
+                    };
 
-                $scope.saveUser = function() {
-                    $scope.users.push($scope.newUser);
-                    $scope.newUser = {};
-                };
+                    //   $scope.docorProfile = [{doctorName: "khairul", designation: "Hasan Zamil", session: "jakir@gmail.com"}];
+                }]);
 
-                $scope.selectUser = function(user) {
-                    console.log(user);
-                };
-
+            $(document).ready(function() {
+                $('#myForm').formValidation({
+                    framework: 'bootstrap',
+                    excluded: ':disabled',
+                    icon: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        doctorName: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The doctor Name is required'
+                                }
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The password is required'
+                                }
+                            }
+                        }
+                    }
+                });
             });
 
+            function findDoctor(id) {
+                alert(id);
+                jQuery.ajax({
+                    type: "GET",
+                    url: getContextPath() + "/module/casesummary/findDoc.htm",
+                    data: ({
+                        id: id
+                    }),
+                    success: function(data) {
+                        jQuery("#billingqueue").html(data);
+                    },
+                });
+            }
+
         </script>
+
     </head>
 
     <body ng-app="myApp"  class="ng-cloak tdn">
@@ -135,10 +187,16 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu" role="menu" >
-                                <li><a role="menuitem" tabindex="-1" href="" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
-                                        Add Doctor Profile</a></li>
-                                <li  ><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
-                                <li  ><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+                                <c:if test="${empty docPro}">
+                                    <li><a role="menuitem" tabindex="-1" href="" data-toggle="modal" data-target="#doctorProfile" 
+                                           data-backdrop="static" data-keyboard="false"> Add Doctor Profile</a></li>
+                                    </c:if>
+
+                                <c:if test="${not empty docPro}">
+                                    <li><a role="menuitem" tabindex="-1" href="" data-toggle="modal" data-target="#doctorProfileEdit" 
+                                           data-backdrop="static" data-keyboard="false"> Update Doctor Profile</a></li>
+                                    </c:if> 
+
                                 <li role="presentation" class="divider"></li>
                                 <li><a role="menuitem" tabindex="-1" href='${pageContext.request.contextPath}/logout'>
                                         <span class="glyphicon glyphicon-log-out"></span>&nbsp; Log Out</a></li>
@@ -159,17 +217,9 @@
                 <div class="col-sm-3">
                     <div >
                         <div class="input-group">
-                            <input type="button" style="text-align:left;"  value="Add Doctor Profile" class="form-control btn btn-success " 
-                                   data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false" />
-                            <span class = "input-group-addon btn" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
-                                <i class="fa fa-user-md green"   aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <br>
-                        <div class="input-group">
                             <input type="button" style="text-align:left;"  value="Add Patient" class="form-control btn btn-success" 
-                                   data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false" />
-                            <span class = "input-group-addon btn" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
+                                   data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false" />
+                            <span class = "input-group-addon btn" data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false">
                                 <i class="fa fa-user-o green" aria-hidden="true"></i>
 
                             </span>
@@ -177,8 +227,8 @@
                         <br>
                         <div class="input-group">
                             <input type="button" style="text-align:left;"  value="Add Slide" class="form-control btn btn-success" 
-                                   data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false" />
-                            <span class = "input-group-addon btn" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">
+                                   data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false" />
+                            <span class = "input-group-addon btn" data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false">
                                 <i class="fa fa-plus-square fa-1x green" aria-hidden="true" ></i>
                             </span>
                         </div>
@@ -190,51 +240,66 @@
         </div>  
 
         <!-- Modal Doctor Profile -->
-        <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal fade" id="doctorProfile" role="dialog" >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h2 class="modal-title">Create Doctor Profile</h2>
                     </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" role="form" method="POST" action="addDoctor.htm">
+                    <div class="modal-body" ng-controller="UserController
+                            as ctrl">
+                        <form name="myForm" id="myForm" class="form-horizontal">
                             <div class="form-group">
                                 <label class="control-label col-sm-3"  >Doctor Name :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="doctorName" id="doctorName" name="doctorName" />
+                                    <input type="text" class="form-control" name="doctorName" data-ng-model="data.doctorName" required ng-minlength="3"/>
+                                    <div class="has-error" ng-show="myForm.$dirty">
+                                        <span ng-show="myForm.doctorName.$error.required">This is a required field</span>
+                                        <span ng-show="myForm.doctorName.$erength">Minimum length required is 3</span>
+                                        <span ng-show="myForm.doctorName.$invalid">This field is invalid </span>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-sm-3"  >Designation</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="designation" id="designation" name="designation" />
+                                    <input type="text" class="form-control" data-ng-model="data.designation" id="designation" name="designation" />
+
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-sm-3"  >Course</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="course" id="course" name="course" />
+                                    <input type="text" class="form-control"  data-ng-model="data.course"  name="course" required ng-minlength="3" />
+                                    <div class="has-error" ng-show="myForm.$dirty">
+                                        <span ng-show="myForm.doctorName.$error.required">This is a required field</span>
+                                        <span ng-show="myForm.course.$erength">Minimum length required is 3</span>
+                                        <span ng-show="myForm.course.$invalid">This field is invalid </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-sm-3"  >Session</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" ng-model="session" id="session" name="session" />
+                                    <input type="text" class="form-control" data-ng-model="data.session" id="session" name="session" />
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-                                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
-                                </button>
-                                <button type="submit"  class="btn btn-primary" data-dismiss="modal">
-                                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
-                                </button>
-                            </div>
+                                <div class="col-sm-8 left ">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+                                    </button>
+                                    <button data-ng-click="submit()"  class="btn btn-primary" data-dismiss="modal" ng-disabled="myForm.$invalid">
+                                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                                    </button>
+                                </div>
+                            </div> 
                         </form>
                     </div>
 
-                    <button type="submit" class="btn btn-default" ng-click="saveUser()" data-dismiss="modal">Save</button>  
+                    <!-- <button type="submit" class="btn btn-default" ng-click="submit()"  >Save</button>  -->
 
                 </div>
             </div>
@@ -243,31 +308,101 @@
     <!-- Modal Doctor Profile End -->
 
 
-    <script>
-        if (SESSION.checkSession()) {
-            jQuery(document).ready(function() {
-                $("#date").css('cursor', 'pointer');
-                $('#date').datepicker();
-                $("#date1").css('cursor', 'pointer');
-                $('#date1').datepicker();
-            });
-        }
+    <!-- Modal Doctor Profile -->
+    <div class="modal fade" id="doctorProfileEdit" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Update Doctor Profile</h2>
+                </div>
+                <div class="modal-body" ng-controller="UserController
+                            as ctrl">
+                    <form name="myForm" id="myForm" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"  >Doctor Name :</label>
+                            <div class="col-sm-8"> ${docPro.doctorName}
+                                <input type="text" class="form-control" name="doctorName" ng-value="${docPro.doctorName}" data-ng-model="data.doctorName" required ng-minlength="3"/>
+                                <div class="has-error" ng-show="myForm.$dirty">
+                                    <span ng-show="myForm.doctorName.$error.required">This is a required field</span>
+                                    <span ng-show="myForm.doctorName.$erength">Minimum length required is 3</span>
+                                    <span ng-show="myForm.doctorName.$invalid">This field is invalid </span>
+                                </div>
+                            </div>
+                        </div>
 
-        $('.clockpicker').clockpicker()
-                .find('input').change(function() {
-            console.log(this.value);
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"  >Designation</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" data-ng-model="data.designation" id="designation" name="designation" />
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"  >Course</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"  data-ng-model="data.course"  name="course" required ng-minlength="3" />
+                                <div class="has-error" ng-show="myForm.$dirty">
+                                    <span ng-show="myForm.doctorName.$error.required">This is a required field</span>
+                                    <span ng-show="myForm.course.$erength">Minimum length required is 3</span>
+                                    <span ng-show="myForm.course.$invalid">This field is invalid </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"  >Session</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" data-ng-model="data.session" id="session" name="session" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-sm-8 left ">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+                                </button>
+                                <button data-ng-click="submit()"  class="btn btn-primary" data-dismiss="modal" ng-disabled="myForm.$invalid">
+                                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                                </button>
+                            </div>
+                        </div> 
+                    </form>
+                </div>
+
+                <!-- <button type="submit" class="btn btn-default" ng-click="submit()"  >Save</button>  -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Doctor Profile End -->
+
+
+
+<script>
+    if (SESSION.checkSession()) {
+        jQuery(document).ready(function() {
+            $("#date").css('cursor', 'pointer');
+            $('#date').datepicker();
+            $("#date1").css('cursor', 'pointer');
+            $('#date1').datepicker();
         });
-        var input = $('#single-input').clockpicker({
-            placement: 'bottom',
-            align: 'left',
-            autoclose: true,
-            'default': 'now'
-        });
-        $('ul li a').click(function() {
-            $('ul li.active').removeClass('active');
-            $(this).closest('li').addClass('active');
-        });
-    </script>
+    }
+
+    $('.clockpicker').clockpicker()
+            .find('input').change(function() {
+        console.log(this.value);
+    });
+    var input = $('#single-input').clockpicker({
+        placement: 'bottom',
+        align: 'left',
+        autoclose: true,
+        'default': 'now'
+    });
+    $('ul li a').click(function() {
+        $('ul li.active').removeClass('active');
+        $(this).closest('li').addClass('active');
+    });
+</script>
 
 </body>
 <%@ include file="/WEB-INF/template/footer.jsp"%>

@@ -45,4 +45,9 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
         return dao.saveDocPro(doctorProfile);
     }
 
+    @Override
+    public DoctorProfile docProFindByUserId(int userId) throws APIException {
+        return dao.docProFindByUserId(userId);
+    }
+
 }

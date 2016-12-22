@@ -22,5 +22,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface CaseSummaryService extends OpenmrsService {
       public DoctorProfile saveDocPro(DoctorProfile doctorProfile)throws APIException;
-      
+      public DoctorProfile docProFindByUserId(int userId)throws APIException;
 }

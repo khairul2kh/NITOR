@@ -21,14 +21,17 @@
         <description>Doctor Profile Table</description>
         <sql>
             CREATE TABLE IF NOT EXISTS `cs_doc_profile` (
-            `doc_pro_id` INT(11) NOT NULL AUTO_INCREMENT,
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
             `doctor_name` VARCHAR(200) DEFAULT NULL,
             `designation` VARCHAR(200) DEFAULT NULL,
             `course` VARCHAR(200) DEFAULT NULL,
             `session` VARCHAR(200) DEFAULT NULL,
             `created_date` DATETIME DEFAULT NULL,
-            PRIMARY KEY (`doc_pro_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            `user_id` INT(11) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `fk_cs_doc_profile_user_id` (`user_id`),
+            CONSTRAINT `fk_cs_doc_profile_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+            ) ENGINE=INNODB DEFAULT CHARSET=utf8;
         </sql>
     </diff>
     

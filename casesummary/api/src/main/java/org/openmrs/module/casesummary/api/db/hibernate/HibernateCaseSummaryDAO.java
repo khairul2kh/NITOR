@@ -13,12 +13,14 @@ package org.openmrs.module.casesummary.api.db.hibernate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.casesummary.api.db.CaseSummaryDAO;
 import org.openmrs.module.casesummary.model.DoctorProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * It is a default implementation of {@link CaseSummaryDAO}.
@@ -42,6 +44,13 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
     public DoctorProfile saveDocPro(DoctorProfile doctorProfile) throws DAOException {
         sessionFactory.getCurrentSession().saveOrUpdate(doctorProfile);
         return doctorProfile;
+    }
+
+    @Override
+    public DoctorProfile docProFindByUserId(int userId) throws DAOException {
+        Criteria criteria=sessionFactory.getCurrentSession().createCriteria(DoctorProfile.class);
+        criteria.add(Restrictions.eq("user.userId",userId));
+        return (DoctorProfile) criteria.uniqueResult();
     }
 
 }

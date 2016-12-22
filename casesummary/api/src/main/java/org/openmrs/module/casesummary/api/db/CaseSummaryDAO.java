@@ -18,5 +18,7 @@ import org.openmrs.module.casesummary.model.DoctorProfile;
 public interface CaseSummaryDAO {
 
     public DoctorProfile saveDocPro(DoctorProfile doctorProfile) throws DAOException;
-    
+
+    public DoctorProfile docProFindByUserId(int userId) throws DAOException;
+
 }
