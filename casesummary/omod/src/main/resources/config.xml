@@ -35,7 +35,7 @@
     <mappingFiles>
 				
         CaseSummary.hbm.xml
-         
+        PatientSearchCs.hbm.xml     
         
 				
     </mappingFiles>

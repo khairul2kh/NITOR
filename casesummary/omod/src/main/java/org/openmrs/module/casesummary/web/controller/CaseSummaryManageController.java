@@ -35,11 +35,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+//import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The main controller.
  */
 @Controller
+//@RestController
 public class CaseSummaryManageController {
 
     protected final Log log = LogFactory.getLog(getClass());
@@ -55,66 +57,69 @@ public class CaseSummaryManageController {
 
     @RequestMapping(value = "/module/casesummary/main.form", method = RequestMethod.GET)
     public String mainPage(Map<String, Object> map, Model model) {
-        User user=Context.getAuthenticatedUser();
+        User user = Context.getAuthenticatedUser();
         map.put("user", user);
-        
         DoctorProfile docPro = caseSumService.docProFindByUserId(user.getId());
-        model.addAttribute("docPro",docPro);
-        
+        model.addAttribute("docPro", docPro);
         User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
-
         return "module/casesummary/main/mainpage";
     }
 
     @RequestMapping(value = "/module/casesummary/createDoctor.htm", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@RequestBody DoctorProfile doctorProfile) {
         //System.out.println("Creating User " + user.getUsername());
-
         doctorProfile.setCreatedDate(new Date());
         doctorProfile.setUser(Context.getAuthenticatedUser());
         caseSumService.saveDocPro(doctorProfile);
-
         HttpHeaders headers = new HttpHeaders();
         // headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/module/casesummary/findDocPro.htm", method = RequestMethod.GET)
-    public ResponseEntity<DoctorProfile> getDocPro(@PathVariable("id") int userId) {
-        //System.out.println("Creating User " + user.getUsername());
-        DoctorProfile docPro = caseSumService.docProFindByUserId(userId);
-        if (docPro == null) {
-            System.out.println("Doctor profile" + userId + "Not found");
-            return new ResponseEntity<DoctorProfile>(docPro, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<DoctorProfile>(docPro, HttpStatus.OK);
+//    @RequestMapping(value = "/module/casesummary/findDocPro.htm", method = RequestMethod.GET)
+//    public ResponseEntity<DoctorProfile> getDocPro(@PathVariable("id") int userId) {
+//        //System.out.println("Creating User " + user.getUsername());
+//        DoctorProfile docPro = caseSumService.docProFindByUserId(userId);
+//        if (docPro == null) {
+//            System.out.println("Doctor profile" + userId + "Not found");
+//            return new ResponseEntity<DoctorProfile>(docPro, HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<DoctorProfile>(docPro, HttpStatus.OK);
+//    }
+//
+//    @RequestMapping(value = "/module/casesummary/findDoc.htm", method = RequestMethod.GET)
+//    public String listCertificate(@RequestParam(value = "id", required = false) int id,
+//            Model model) {
+//        // map.put("registration", new BirthRegistration());
+//        DoctorProfile docPro = caseSumService.docProFindByUserId(id);
+//        model.addAttribute("docPro", docPro);
+//        System.out.println("*********docPro" + docPro);
+//
+//        return "module/casesummary/main/docUpdate";
+//
+//    }
+ 
+    
+    @RequestMapping(value = "/module/casesummary/update.form", method = RequestMethod.POST)
+    public String updateDoc( 
+            @ModelAttribute("doctorProfile") DoctorProfile doctorProfile, BindingResult result,
+            @RequestParam(value = "id", required = false) int id,
+            @RequestParam(value = "doctorName", required = false) String docName,
+            @RequestParam(value = "designation", required = false) String designation,
+            @RequestParam(value = "course", required = false) String course,
+            @RequestParam(value = "session", required = false) String session) {
+       
+        doctorProfile=caseSumService.docProFindByUserId(id);
+        doctorProfile.setDoctorName(docName);
+        doctorProfile.setDesignation(designation);
+        doctorProfile.setCourse(course);
+        doctorProfile.setSession(session);
+        caseSumService.saveDocPro(doctorProfile);
+                
+        return "module/casesummary/thickbox/success_1";
     }
-
-    @RequestMapping(value = "/module/casesummary/findDoc.htm", method = RequestMethod.GET)
-    public String listCertificate(   @RequestParam(value = "id", required = false) int id,
-            Model model) {
-        // map.put("registration", new BirthRegistration());
-        DoctorProfile docPro = caseSumService.docProFindByUserId(id);
-        model.addAttribute("docPro",docPro);
-        System.out.println("*********docPro"+docPro);
-
-        return "module/casesummary/main/docUpdate";
-
-    }
-
+   
 }
 
-
-/*
- @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
- public ResponseEntity<User> getUser(@PathVariable("id") long id) {
- System.out.println("Fetching User with id " + id);
- User user = userService.findById(id);
- if (user == null) {
- System.out.println("User with id " + id + " not found");
- return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
- }
- return new ResponseEntity<User>(user, HttpStatus.OK);
- }
- */
+ 
