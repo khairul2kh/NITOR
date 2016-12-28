@@ -15,7 +15,8 @@
 
         <style>
             .form-horizontal .control-label{
-
+                font-size:14px;
+                font-weight:normal;
             }
         </style>
 
@@ -141,50 +142,57 @@
 
                     <form class="form-horizontal">
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="pname">Patient Name :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"    for="pname">Patient Name </label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="pname" name="pname" value="${ps.givenName} ${ps.middleName} ${ps.familyName}" >
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="pid">Patient ID :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"     for="pid">Patient ID </label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="pid" name="pid" value="${ps.identifier}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="age">Age :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"    for="age">Age </label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="age" name="age" value="${ps.age}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="address">Address :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"   for="address">Address </label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <textarea class="form-control" rows="3" name="address" id="address" placeholder="Please Enter Address" ></textarea>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="fname">Father's Name :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"   for="fname">Father's Name </label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="fname" name="fname">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="diagnosis">Diagnosis :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"   for="diagnosis">Diagnosis </label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="diagnosis" name="diagnosis">
                             </div>
                         </div>
 
                         <div class="form-group">
 
-                            <label class="control-label col-sm-2" for="icdcode">ICD 10 Code :</label>
+                            <label class="control-label col-sm-2" for="icdcode">ICD 10 Code </label>
+                            <label class="control-label col-sm-1"   >:</label>
                             <div class="col-md-2">
                                 <input type="text" style="padding-left:10px;" name="icdcode"  id="icdcode" class="form-control" placeholder="ICD Code" />                  
                             </div>
@@ -197,20 +205,20 @@
                             <div class="col-md-2">
                                 <input type="text" style="padding-left:10px;" name="icdcode"  id="icdcode" class="form-control" placeholder="ICD Code" />                  
                             </div> 
-                            <div class="col-md-1">
-                                <input type="text" style="padding-left:10px;" name="icdcode"  id="icdcode" class="form-control" placeholder="ICD Code" />                  
-                            </div> 								
+
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="nofpre">Name of Presenter :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"   for="nofpre">Name of Presenter</label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="nofpre" name="nofpre" value="${u.person.givenName} ${u.person.middleName} ${u.person.familyName}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="pdate">Presntation Date :</label>
+                            <label class="control-label col-sm-2"   for="pdate">Presntation Date </label>
+                            <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-3"> 
                                 <input type="text" style="padding-left:10px;" name="pdate"  id="pdate" class="username form-control input-sm" placeholder="Enter date" />                  
 
@@ -218,38 +226,40 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="award">Admitted Ware :</label>
-                            <div class="col-sm-9"> 
+                            <label class="control-label col-sm-2"   for="award">Admitted Ware </label>
+                            <label class="control-label col-sm-1"   >:</label>
+                            <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="award" name="award" >
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="abed">Admitted bed :</label>
+                            <label class="control-label col-sm-2"   for="abed">Admitted bed </label>
+                            <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-3"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="abed" name="abed" >
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="gender">Gender :</label>
+                            <label class="control-label col-sm-2"   for="gender">Gender </label>
+                            <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-3"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="gender" name="gender" value="${ps.gender}" >
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="unit">Unit :</label>
+                            <label class="control-label col-sm-2"   for="unit">Unit </label>
+                            <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-3"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="unit" name="unit"   >
                             </div>
                         </div>
 
-
-
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">Submit</button>
+                            <div class="col-sm-offset-3 col-sm-10">
+                                <button type="submit" class="btn btn-success">Submit</button>
                             </div>
                         </div>
                     </form>

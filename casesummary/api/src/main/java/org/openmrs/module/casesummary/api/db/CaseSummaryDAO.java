@@ -11,14 +11,20 @@
  */
 package org.openmrs.module.casesummary.api.db;
 
+import java.util.List;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.PatientSearchCs;
 
 public interface CaseSummaryDAO {
 
     public DoctorProfile saveDocPro(DoctorProfile doctorProfile) throws DAOException;
 
     public DoctorProfile docProFindByUserId(int userId) throws DAOException;
+
+    public List<PatientSearchCs> patientSearchByIdName(String searchKey) throws DAOException;
+
+    public PatientSearchCs getPatientSerByPatientId(int id) throws DAOException;
 
 }

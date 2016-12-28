@@ -11,6 +11,7 @@
  */
 package org.openmrs.module.casesummary.api.impl;
 
+import java.util.List;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +19,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.api.db.CaseSummaryDAO;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,16 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
     @Override
     public DoctorProfile docProFindByUserId(int userId) throws APIException {
         return dao.docProFindByUserId(userId);
+    }
+
+    @Override
+    public List<PatientSearchCs> patientSearchByIdName(String searchKey) throws APIException {
+        return dao.patientSearchByIdName(searchKey);
+    }
+
+    @Override
+    public PatientSearchCs getPatientSerByPatientId(int id) throws APIException {
+        return dao.getPatientSerByPatientId(id);
     }
 
 }
