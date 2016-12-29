@@ -36,18 +36,34 @@
     </diff>
     
     <diff>
-        <version>1.0.2</version>
-        <author>Md. Khairul Islam</author>
+        <version>1.0.3</version>
+        <author>Md. Khaiurl Islam</author>
         <date>21 Dec 2016</date>
-        <description>Birth Certificate Data</description>
+        <description>Doctor Profile Table</description>
         <sql>
-            CREATE TABLE IF NOT EXISTS `cs_birth_registration` (
-            `id` int(11) NOT NULL auto_increment,
-            `memo_no` varchar(255) default NULL,
-            `date` date default NULL,           
-            PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            CREATE TABLE IF NOT EXISTS `cs_select_patient` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `patient_id` INT(11) NOT NULL,
+            `address` VARCHAR(400) DEFAULT NULL,
+            `father_name` VARCHAR(100) DEFAULT NULL,
+            `diagnosis` VARCHAR(200) DEFAULT NULL,
+            `icd_10_code` VARCHAR(200) DEFAULT NULL,
+            `name_of_presenter` VARCHAR(100) DEFAULT NULL,
+            `presentation_date` DATE DEFAULT NULL,
+            `admitted_ward` VARCHAR(200) DEFAULT NULL,
+            `admitted_bed` VARCHAR(50) DEFAULT NULL,
+            `unit` VARCHAR(200) DEFAULT NULL,
+            `created_date` DATETIME DEFAULT NULL,
+            `user_id` INT(11) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `fk_cs_select_patient_user_id` (`user_id`),
+             KEY `fk_cs_select_patient_patient_id` (`patient_id`),
+            CONSTRAINT `fk_cs_select_patient_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+            CONSTRAINT `fk_cs_select_patient_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`)
+            ) ENGINE=INNODB DEFAULT CHARSET=utf8;
         </sql>
     </diff>
+    
+     
  	
 </sqldiff>

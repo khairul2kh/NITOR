@@ -16,6 +16,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
+import org.openmrs.module.casesummary.model.SelectPatient;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -29,4 +30,5 @@ public interface CaseSummaryService extends OpenmrsService {
     
     public PatientSearchCs getPatientSerByPatientId(int id)throws APIException;
     
+    public SelectPatient saveSlectPatient(SelectPatient selectPatient)throws APIException;
 }

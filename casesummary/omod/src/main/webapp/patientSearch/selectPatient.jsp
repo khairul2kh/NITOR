@@ -18,36 +18,13 @@
                 font-size:14px;
                 font-weight:normal;
             }
+            .form-control{color:black;}
         </style>
 
         <script>
             var myApp = angular.module("myApp", []);
             myApp.controller('UserController', ['$scope', '$http', function($scope, $http) {
-                    $scope.messages = [];
-                    $scope.data = {};
-                    $scope.submit = function() {
-                        $http({
-                            method: 'POST',
-                            url: getContextPath() + '/module/casesummary/createDoctor.htm',
-                            data: $scope.data
-                        }).
-                                success(function(data, status, headers) {
-                                    //$window.location.replace(getContextPath() +'/module/casesummary/createDoctor.htm');
-                                    location.reload();
-                                }).
-                                error(function(data, status, headers) {
-                                    if (status == 400) {
-                                        $scope.messages = data;
-                                    } else {
-                                        location.reload();
-                                    }
-                                });
-                    };
 
-                    $scope.IsVisible = false;
-                    $scope.ShowHide = function() {
-                        $scope.IsVisible = $scope.IsVisible ? false : true;
-                    };
 
                     //$scope.docName=${docPro.doctorName};
                     //   $scope.docorProfile = [{doctorName: "khairul", designation: "Hasan Zamil", session: "jakir@gmail.com"}];
@@ -55,6 +32,7 @@
 
             if (SESSION.checkSession()) {
                 $(document).ready(function() {
+                    jQuery('#pdate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
                     jQuery("#searchKey").keyup(function(event) {
                         if (event.keyCode == 13) {
                             getPatientInSystem();
@@ -86,6 +64,45 @@
                             }
                         }
                     });
+                });
+            }
+
+            function savePatient(patientId) {
+
+                var address = $("#address").val();
+                var fatherName = $("#fatherName").val();
+                var diagnosis = $("#diagnosis").val();
+                var icdCode = $("#icdCode").val();
+                var nameOfPresenter = $("#nameOfPresenter").val();
+                var pdate = $("#pdate").val();
+                var award = $("#award").val();
+                var abed = $("#abed").val();
+                var unit = $("#unit").val();
+
+                $.ajax({
+                    url: getContextPath() + "/module/casesummary/selectPatientSave.htm",
+                    type: "POST",
+                    //dataType: 'json',
+                    data: {
+                        patientId: patientId,
+                        address: address,
+                        fatherName: fatherName,
+                        diagnosis: diagnosis,
+                        icdCode: icdCode,
+                        nameOfPresenter: nameOfPresenter,
+                        pdate: pdate,
+                        award: award,
+                        abed: abed,
+                        unit: unit
+                    },
+                    success: function() {
+                        alert("Successfully Added!!!");
+                        window.location = "selectedPatient.htm";
+                    },
+                    error: function() {
+
+
+                    }
                 });
             }
 
@@ -140,7 +157,7 @@
                 <div class="panel-heading">Patient Information</div>
                 <div class="panel-body"> 
 
-                    <form class="form-horizontal">
+                    <form class="form-horizontal"  >
                         <div class="form-group">
                             <label class="control-label col-sm-2"    for="pname">Patient Name </label>
                             <label class="control-label col-sm-1"   >:</label>
@@ -177,7 +194,7 @@
                             <label class="control-label col-sm-2"   for="fname">Father's Name </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-8"> 
-                                <input type="text" style="padding-left:10px;" class="form-control" id="fname" name="fname">
+                                <input type="text" style="padding-left:10px;" class="form-control" id="fatherName" name="fatherName">
                             </div>
                         </div>
 
@@ -194,16 +211,16 @@
                             <label class="control-label col-sm-2" for="icdcode">ICD 10 Code </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-md-2">
-                                <input type="text" style="padding-left:10px;" name="icdcode"  id="icdcode" class="form-control" placeholder="ICD Code" />                  
+                                <input type="text" style="padding-left:10px;" name="icdCode"  id="icdCode" class="form-control" placeholder="ICD Code" />                  
                             </div>
                             <div class="col-md-2">
-                                <input type="text" style="padding-left:10px;" name="icdcode"  id="icdcode" class="form-control" placeholder="ICD Code" />                  
+                                <input type="text" style="padding-left:10px;" name="icdCode1"  id="icdCode1" class="form-control" placeholder="ICD Code" />                  
                             </div>
                             <div class="col-md-2">
-                                <input type="text" style="padding-left:10px;" name="icdcode"  id="icdcode" class="form-control" placeholder="ICD Code" />                  
+                                <input type="text" style="padding-left:10px;" name="icdCode2"  id="icdCode2" class="form-control" placeholder="ICD Code" />                  
                             </div>
                             <div class="col-md-2">
-                                <input type="text" style="padding-left:10px;" name="icdcode"  id="icdcode" class="form-control" placeholder="ICD Code" />                  
+                                <input type="text" style="padding-left:10px;" name="icdCode3"  id="icdCode3" class="form-control" placeholder="ICD Code" />                  
                             </div> 
 
                         </div>
@@ -212,12 +229,12 @@
                             <label class="control-label col-sm-2"   for="nofpre">Name of Presenter</label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-8"> 
-                                <input type="text" style="padding-left:10px;" class="form-control" id="nofpre" name="nofpre" value="${u.person.givenName} ${u.person.middleName} ${u.person.familyName}">
+                                <input type="text" style="padding-left:10px;" class="form-control" id="nameOfPresenter" name="nameOfPresenter" value="${u.person.givenName} ${u.person.middleName} ${u.person.familyName}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="pdate">Presntation Date </label>
+                            <label class="control-label col-sm-2"   for="pdate">Presentation Date </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-3"> 
                                 <input type="text" style="padding-left:10px;" name="pdate"  id="pdate" class="username form-control input-sm" placeholder="Enter date" />                  
@@ -226,7 +243,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"   for="award">Admitted Ware </label>
+                            <label class="control-label col-sm-2"   for="award">Admitted Ward </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-8"> 
                                 <input type="text" style="padding-left:10px;" class="form-control" id="award" name="award" >
@@ -259,7 +276,9 @@
 
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-10">
-                                <button type="submit" class="btn btn-success">Submit</button>
+                                <button onclick="savePatient('${ps.patientId}')"  class="btn btn-primary" data-dismiss="modal" ng-disabled="myForm.$invalid">
+                                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                                </button>
                             </div>
                         </div>
                     </form>

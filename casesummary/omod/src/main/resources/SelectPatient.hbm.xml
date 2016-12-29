@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.casesummary.model">
+
+    <class name="SelectPatient" table="cs_select_patient" batch-size="500">
+
+        <id name="id" type="int" column="id"
+            unsaved-value="0">				
+        </id>		
+         
+        <many-to-one name="patientId" column="patient_id" class="org.openmrs.Patient"
+                     lazy="false" foreign-key="fk_cs_select_patient_patient_id" />  
+        
+        <property name="address" column="address" />
+        <property name="fatherName" column="father_name" />
+        <property name="diagnosis" column="diagnosis" />
+        <property name="icdCode" column="icd_10_code" />
+        <property name="nameOfPresenter" column="name_of_presenter" />
+        <property name="presentationDate" column="presentation_date" />
+        <property name="admittedWard" column="admitted_ward" />
+        <property name="admittedBed" column="admitted_bed" /> 
+        <property name="unit" column="unit" />
+        <property name="createdDate" column="created_date" />
+        <many-to-one name="userId" column="user_id" class="org.openmrs.User"
+                     foreign-key="fk_cs_select_patient_user_id" />
+        
+    </class>
+</hibernate-mapping>

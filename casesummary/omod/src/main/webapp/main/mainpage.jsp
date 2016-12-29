@@ -11,7 +11,7 @@
     <head>  
 
         <title>Doctor Profile Entry Form</title>  
-         
+
         <script>
             var myApp = angular.module("myApp", []);
             myApp.controller('UserController', ['$scope', '$http', function($scope, $http) {
@@ -195,25 +195,49 @@
         <br><br><br>
         <!-- Main Body Start Here -->
         <div class="container theme-showcase" role="main" ng-controller="UserController">
-            <div class="page-header" ng-hide = "IsVisible">
-                <h1> Text </h1>
-            </div>
-            <div class="row">
-                <div class="col-sm-2"><div>  </div>   </div>
-                <div class="col-sm-3">
-                    <div ng-hide = "IsVisible">
-                        <div class="input-group" id="seracrButton">
-                            <input type="button"  ng-click="ShowHide()" style="text-align:left;"  value="Add Patient" class="form-control btn btn-success" 
-                                   data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false" />
-                            <span class = "input-group-addon btn" data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false">
-                                <i class="fa fa-user-o green" aria-hidden="true"></i>
-                            </span>
+
+            <div class="panel panel-success" ng-hide = "IsVisible">
+                <div class="panel-heading">Please Select Patient</div>
+                <div class="panel-body"> 
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div ng-hide="IsVisible">
+                                <div class="input-group" id="seracrButton">
+                                    <input type="button"  ng-click="ShowHide()" style="text-align:left;"  value="Add Patient" class="form-control btn btn-success" 
+                                           data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false" />
+                                    <span class = "input-group-addon btn" ng-click="ShowHide()" data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-user-o green" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                            </div>
                         </div>
-                        <br>
                     </div>
                 </div>
-                <div class="col-sm-2"><div>  </div>   </div>
             </div>
+
+            <div class="panel panel-success" ng-hide = "IsVisible">
+                <div class="panel-heading">Selected Patient List </div>
+                <div class="panel-body"> 
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div ng-hide="IsVisible">
+                                <div class="input-group" id="seracrButton">
+                                    <input type="button"    style="text-align:left;"  value="Selected Patient List" class="form-control btn btn-info" 
+                                           onclick="location.href = 'selectedPatient.htm';" />
+                                    <span class = "input-group-addon btn"   data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false">
+                                        <i class="glyphicon glyphicon-th-list blue" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
 
             <!-- Patient Search Div -->
             <div class="col-sm-14" id="patientSearch" ng-show = "IsVisible">

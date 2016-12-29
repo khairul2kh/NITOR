@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
+import org.openmrs.module.casesummary.model.SelectPatient;
 
 /**
  * It is a default implementation of {@link CaseSummaryDAO}.
@@ -80,6 +81,12 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
         Criteria criteria=sessionFactory.getCurrentSession().createCriteria(PatientSearchCs.class);
         criteria.add(Restrictions.eq("patientId", id));
         return (PatientSearchCs) criteria.uniqueResult();
+    }
+
+    @Override
+    public SelectPatient saveSlectPatient(SelectPatient selectPatient) throws DAOException {
+      sessionFactory.getCurrentSession().saveOrUpdate(selectPatient);
+      return selectPatient;
     }
 
 }

@@ -20,6 +20,7 @@ import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.api.db.CaseSummaryDAO;
 import org.openmrs.module.casesummary.model.DoctorProfile;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
+import org.openmrs.module.casesummary.model.SelectPatient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,11 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
     @Override
     public PatientSearchCs getPatientSerByPatientId(int id) throws APIException {
         return dao.getPatientSerByPatientId(id);
+    }
+
+    @Override
+    public SelectPatient saveSlectPatient(SelectPatient selectPatient) throws APIException {
+        return dao.saveSlectPatient(selectPatient);
     }
 
 }

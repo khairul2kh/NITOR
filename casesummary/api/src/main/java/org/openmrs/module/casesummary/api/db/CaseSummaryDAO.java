@@ -16,6 +16,7 @@ import org.openmrs.api.db.DAOException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
+import org.openmrs.module.casesummary.model.SelectPatient;
 
 public interface CaseSummaryDAO {
 
@@ -26,5 +27,7 @@ public interface CaseSummaryDAO {
     public List<PatientSearchCs> patientSearchByIdName(String searchKey) throws DAOException;
 
     public PatientSearchCs getPatientSerByPatientId(int id) throws DAOException;
+    
+    public SelectPatient saveSlectPatient(SelectPatient selectPatient)throws DAOException;
 
 }
