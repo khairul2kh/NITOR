@@ -31,4 +31,8 @@ public interface CaseSummaryService extends OpenmrsService {
     public PatientSearchCs getPatientSerByPatientId(int id)throws APIException;
     
     public SelectPatient saveSlectPatient(SelectPatient selectPatient)throws APIException;
+    
+    public List<SelectPatient> listSelectPatientByUser(int userId)throws APIException;
+    
+    public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId)throws APIException;
 }

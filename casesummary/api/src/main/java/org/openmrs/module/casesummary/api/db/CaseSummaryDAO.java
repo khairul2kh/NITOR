@@ -29,5 +29,9 @@ public interface CaseSummaryDAO {
     public PatientSearchCs getPatientSerByPatientId(int id) throws DAOException;
     
     public SelectPatient saveSlectPatient(SelectPatient selectPatient)throws DAOException;
+    
+    public List<SelectPatient> listSelectPatientByUser(int userId)throws DAOException;
+    
+    public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId)throws DAOException;
 
 }

@@ -8,6 +8,7 @@ package org.openmrs.module.casesummary.web.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
@@ -110,14 +111,52 @@ public class PatientSerachInSystem {
 
         return "redirect:/module/casesummary/main.form";
     }
-
-    @RequestMapping(value = "/module/casesummary/selectedPatient.htm", method = RequestMethod.GET)
-    public String selectedPatient(ModelMap model) {
+    
+     @RequestMapping(value = "/module/casesummary/selectedPatientSingle.htm", method = RequestMethod.GET)
+    public String selectedPatientSingle(@RequestParam("patientId") int patientId, ModelMap model) {
         User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
+        int userId = u.getUserId();
+
+        SelectPatient sp=caseSumService.getSelectPatiByPatientIdUsreId(userId, patientId);
+        model.addAttribute("sp",sp);
+        model.addAttribute("age",sp.getPatientId().getAge());
         
 
-        return "module/casesummary/patientSearch/selectedPatient";
+        return "module/casesummary/patientSearch/selectedPatientSingle";
+    }
+
+//    @RequestMapping(value = "/module/casesummary/selectedPatient.htm", method = RequestMethod.GET)
+//    public String selectedPatient(@RequestParam("patientId") int patientId, ModelMap model) {
+//        User u = Context.getAuthenticatedUser();
+//        model.addAttribute("u", u);
+//        int userId = u.getUserId();
+//
+//        SelectPatient sp=caseSumService.getSelectPatiByPatientIdUsreId(userId, patientId);
+//        model.addAttribute("sp",sp);
+//        model.addAttribute("age",sp.getPatientId().getAge());
+//        
+//        return "module/casesummary/patientSearch/selectedPatient";
+//    }
+    
+    @RequestMapping(value = "/module/casesummary/selectedPatientList.htm", method = RequestMethod.GET)
+    public String selectedPatientList( ModelMap model) {
+        User u = Context.getAuthenticatedUser();
+        model.addAttribute("u", u);
+        int userId = u.getUserId();
+
+        List<SelectPatient> listSelPatient = caseSumService.listSelectPatientByUser(userId);
+        model.addAttribute("listSelPat", listSelPatient);
+
+        HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
+
+        for (Integer i = 0; i < listSelPatient.size(); i++) {
+            hashMap.put(listSelPatient.get(i).getPatientId().getPatientId(),
+                    listSelPatient.get(i).getPatientId().getAge().toString());
+        }
+        model.addAttribute("hashMap", hashMap);
+
+        return "module/casesummary/patientSearch/selectedPatientList";
     }
 
 }

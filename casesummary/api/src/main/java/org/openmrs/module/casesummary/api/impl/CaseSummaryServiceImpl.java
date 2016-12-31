@@ -68,4 +68,14 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
         return dao.saveSlectPatient(selectPatient);
     }
 
+    @Override
+    public List<SelectPatient> listSelectPatientByUser(int userId) throws APIException {
+        return dao.listSelectPatientByUser(userId);
+    }
+
+    @Override
+    public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId) throws APIException {
+        return dao.getSelectPatiByPatientIdUsreId(userId, patientId);
+    }
+
 }

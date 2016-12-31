@@ -137,7 +137,7 @@
             }
             ;
             function selectPatient(patientId) {
-                alert(patientId);
+               // alert(patientId);
                 window.location.href = openmrsContextPath + "/module/casesummary/selectPatient.htm?patientId=" + patientId;
             }
             ;
@@ -225,7 +225,7 @@
                             <div ng-hide="IsVisible">
                                 <div class="input-group" id="seracrButton">
                                     <input type="button"    style="text-align:left;"  value="Selected Patient List" class="form-control btn btn-info" 
-                                           onclick="location.href = 'selectedPatient.htm';" />
+                                           onclick="location.href = 'selectedPatientList.htm';" />
                                     <span class = "input-group-addon btn"   data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false">
                                         <i class="glyphicon glyphicon-th-list blue" aria-hidden="true"></i>
                                     </span>

@@ -78,15 +78,31 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
 
     @Override
     public PatientSearchCs getPatientSerByPatientId(int id) throws DAOException {
-        Criteria criteria=sessionFactory.getCurrentSession().createCriteria(PatientSearchCs.class);
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PatientSearchCs.class);
         criteria.add(Restrictions.eq("patientId", id));
         return (PatientSearchCs) criteria.uniqueResult();
     }
 
     @Override
     public SelectPatient saveSlectPatient(SelectPatient selectPatient) throws DAOException {
-      sessionFactory.getCurrentSession().saveOrUpdate(selectPatient);
-      return selectPatient;
+        sessionFactory.getCurrentSession().saveOrUpdate(selectPatient);
+        return selectPatient;
+    }
+
+    @Override
+    public List<SelectPatient> listSelectPatientByUser(int userId) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(SelectPatient.class);
+        criteria.add(Restrictions.eq("userId.userId", userId));
+        return criteria.list();
+    }
+
+    @Override
+    public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(SelectPatient.class);
+        criteria.add(Restrictions.eq("userId.userId", userId));
+        criteria.add(Restrictions.eq("patientId.personId", patientId));
+        return (SelectPatient) criteria.uniqueResult();
+        
     }
 
 }

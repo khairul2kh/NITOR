@@ -39,7 +39,7 @@
                         }
                     });
 
-                    $('#myForm').formValidation({
+                    $('#selectPatientForm').formValidation({
                         framework: 'bootstrap',
                         excluded: ':disabled',
                         icon: {
@@ -48,7 +48,7 @@
                             validating: 'glyphicon glyphicon-refresh'
                         },
                         fields: {
-                            doctorName: {
+                            pdate: {
                                 validators: {
                                     notEmpty: {
                                         message: 'The doctor Name is required'
@@ -79,6 +79,10 @@
                 var abed = $("#abed").val();
                 var unit = $("#unit").val();
 
+                if (pdate == "" || pdate == null) {
+                    return false;
+                }
+
                 $.ajax({
                     url: getContextPath() + "/module/casesummary/selectPatientSave.htm",
                     type: "POST",
@@ -97,7 +101,7 @@
                     },
                     success: function() {
                         alert("Successfully Added!!!");
-                        window.location = "selectedPatient.htm";
+                        window.location = "selectedPatientSingle.htm?patientId="+patientId;
                     },
                     error: function() {
 
@@ -157,12 +161,12 @@
                 <div class="panel-heading">Patient Information</div>
                 <div class="panel-body"> 
 
-                    <form class="form-horizontal"  >
+                    <form class="form-horizontal" id="selectPatientForm" name="selectPatientForm" data-toggle="validator"  >
                         <div class="form-group">
                             <label class="control-label col-sm-2"    for="pname">Patient Name </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-8"> 
-                                <input type="text" style="padding-left:10px;" class="form-control" id="pname" name="pname" value="${ps.givenName} ${ps.middleName} ${ps.familyName}" >
+                                <input type="text" style="padding-left:10px;" readonly="true" class="form-control" id="pname" name="pname" value="${ps.givenName} ${ps.middleName} ${ps.familyName}" >
                             </div>
                         </div>
 
@@ -170,7 +174,7 @@
                             <label class="control-label col-sm-2"     for="pid">Patient ID </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-8"> 
-                                <input type="text" style="padding-left:10px;" class="form-control" id="pid" name="pid" value="${ps.identifier}">
+                                <input type="text" style="padding-left:10px;" readonly="true" class="form-control" id="pid" name="pid" value="${ps.identifier}">
                             </div>
                         </div>
 
@@ -178,7 +182,7 @@
                             <label class="control-label col-sm-2"    for="age">Age </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-8"> 
-                                <input type="text" style="padding-left:10px;" class="form-control" id="age" name="age" value="${ps.age}">
+                                <input type="text" style="padding-left:10px;" readonly="true" class="form-control" id="age" name="age" value="${ps.age}">
                             </div>
                         </div>
 
@@ -237,7 +241,7 @@
                             <label class="control-label col-sm-2"   for="pdate">Presentation Date </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-3"> 
-                                <input type="text" style="padding-left:10px;" name="pdate"  id="pdate" class="username form-control input-sm" placeholder="Enter date" />                  
+                                <input type="text" style="padding-left:10px;" name="pdate"  id="pdate"  class="username form-control input-sm" placeholder="Enter date" required >                  
 
                             </div>
                         </div>
@@ -262,7 +266,7 @@
                             <label class="control-label col-sm-2"   for="gender">Gender </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-3"> 
-                                <input type="text" style="padding-left:10px;" class="form-control" id="gender" name="gender" value="${ps.gender}" >
+                                <input type="text" style="padding-left:10px;" readonly="true" class="form-control" id="gender" name="gender" value="${ps.gender}" >
                             </div>
                         </div>
 
@@ -276,7 +280,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-10">
-                                <button onclick="savePatient('${ps.patientId}')"  class="btn btn-primary" data-dismiss="modal" ng-disabled="myForm.$invalid">
+                                <button onclick="savePatient('${ps.patientId}')"  class="btn btn-primary" >
                                     <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
                                 </button>
                             </div>
