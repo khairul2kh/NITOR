@@ -15,7 +15,9 @@ import java.util.List;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
+import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,4 +37,15 @@ public interface CaseSummaryService extends OpenmrsService {
     public List<SelectPatient> listSelectPatientByUser(int userId)throws APIException;
     
     public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId)throws APIException;
+    
+    public SailentFeature saveSailentFeat(SailentFeature sailentFeature)throws APIException;
+    
+    public SelectPatient getSelPatientById(int id)throws APIException;
+    
+    public SailentFeature getSailentById(int id)throws APIException;
+    
+    public OtNote saveOtNote(OtNote otNote)throws APIException;
+    
+    public List<OtNote> listOtNote(int id)throws APIException;
+            
 }

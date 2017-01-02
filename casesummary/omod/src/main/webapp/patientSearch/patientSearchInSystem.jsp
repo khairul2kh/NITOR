@@ -22,8 +22,7 @@
             </thead> 
             <tbody>
                 <c:forEach items="${listPatient}" var="patient" varStatus="varStatus">
-                    <tr    
-                        onclick="selectPatient(${patient.patientId});">
+                    <tr onclick="selectPatient('${patient.patientId}');">
                         <td> ${varStatus.count} </td>
                         <td>${patient.identifier}</td>
                         <td>${patient.givenName} ${patient.middleName}  ${patient.familyName}                         </td>

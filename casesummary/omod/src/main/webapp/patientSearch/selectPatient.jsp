@@ -68,7 +68,6 @@
             }
 
             function savePatient(patientId) {
-
                 var address = $("#address").val();
                 var fatherName = $("#fatherName").val();
                 var diagnosis = $("#diagnosis").val();
@@ -82,7 +81,6 @@
                 if (pdate == "" || pdate == null) {
                     return false;
                 }
-
                 $.ajax({
                     url: getContextPath() + "/module/casesummary/selectPatientSave.htm",
                     type: "POST",

@@ -12,6 +12,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
 import org.openmrs.scheduler.tasks.AbstractTask;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class DataTest extends AbstractTask {
 
     @Override
     public void execute() {
+        SailentFeature sf=new SailentFeature();
+        sf.setSailentFeature("sdfdsf");
+        caseSumService.saveSailentFeat(sf);
        
         System.out.println("*********************");
     }

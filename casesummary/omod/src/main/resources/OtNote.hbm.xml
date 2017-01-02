@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.casesummary.model">
+
+    <class name="OtNote" table="cs_ot_note" batch-size="500">
+
+        <id name="id" type="int" column="id"
+            unsaved-value="0">				
+        </id>		
+         
+        <property name="date" column="date" />  
+        <property name="time" column="time" />  
+        <property name="nameOfOt" column="name_of_ot" />
+        <property name="procedureDetail" column="procedure_detail" />
+        <property name="creator" column="creator" />
+        <property name="createdDate" column="created_date" />
+        
+        <many-to-one name="selectPatient" column="select_patient_id" class="org.openmrs.module.casesummary.model.SelectPatient"
+                     lazy="false" foreign-key="fk_cs_ot_note_selectpatient_id" />
+       
+    </class>
+</hibernate-mapping>

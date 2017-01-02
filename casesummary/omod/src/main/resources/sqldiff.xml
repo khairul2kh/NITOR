@@ -39,7 +39,7 @@
         <version>1.0.3</version>
         <author>Md. Khaiurl Islam</author>
         <date>21 Dec 2016</date>
-        <description>Doctor Profile Table</description>
+        <description>Select Patient for Presentation</description>
         <sql>
             CREATE TABLE IF NOT EXISTS `cs_select_patient` (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -57,13 +57,52 @@
             `user_id` INT(11) DEFAULT NULL,
             PRIMARY KEY (`id`),
             KEY `fk_cs_select_patient_user_id` (`user_id`),
-             KEY `fk_cs_select_patient_patient_id` (`patient_id`),
+            KEY `fk_cs_select_patient_patient_id` (`patient_id`),
             CONSTRAINT `fk_cs_select_patient_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
             CONSTRAINT `fk_cs_select_patient_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`)
             ) ENGINE=INNODB DEFAULT CHARSET=utf8;
         </sql>
     </diff>
     
+    <diff>
+        <version>1.0.4</version>
+        <author>Md. Khaiurl Islam</author>
+        <date>21 Dec 2016</date>
+        <description>Sailent Feature</description>
+        <sql>
+            CREATE TABLE IF NOT EXISTS `cs_sailent_feat` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `sailent_feature` VARCHAR(500) DEFAULT NULL,
+            `select_patient_id` INT(11) DEFAULT NULL,
+            `created_date` DATETIME DEFAULT NULL,
+            `creator` INT(11) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `fk_cs_sailent_feature_selectpatient_id` (`select_patient_id`),
+            CONSTRAINT `fk_cs_sailent_feature_selectpatient_id` FOREIGN KEY (`select_patient_id`) REFERENCES `cs_select_patient` (`id`)
+            ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+        </sql>
+    </diff>
+    
+    <diff>
+        <version>1.0.5</version>
+        <author>Md. Khaiurl Islam</author>
+        <date>21 Dec 2016</date>
+        <description>Sailent Feature</description>
+        <sql>
+            CREATE TABLE IF NOT EXISTS `cs_ot_note` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `select_patient_id` INT(11) DEFAULT NULL,
+            `date` DATE DEFAULT NULL,
+            `time` VARCHAR(20) DEFAULT NULL,
+            `name_of_ot` VARCHAR(20) DEFAULT NULL,
+            `procedure_detail` VARCHAR(20) DEFAULT NULL,
+            `created_date` DATETIME DEFAULT NULL,
+            `creator` INT(11) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `fk_cs_ot_note_selectpatient_id` (`select_patient_id`),
+            CONSTRAINT `fk_cs_ot_note_selectpatient_id` FOREIGN KEY (`select_patient_id`) REFERENCES `cs_select_patient` (`id`)
+            ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+        </sql>
+    </diff>
      
- 	
 </sqldiff>

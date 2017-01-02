@@ -15,7 +15,9 @@ import java.util.List;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
+import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
 
 public interface CaseSummaryDAO {
@@ -33,5 +35,15 @@ public interface CaseSummaryDAO {
     public List<SelectPatient> listSelectPatientByUser(int userId)throws DAOException;
     
     public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId)throws DAOException;
-
+    
+    public SailentFeature saveSailentFeat(SailentFeature sailentFeature)throws DAOException;
+    
+    public SelectPatient getSelPatientById(int id)throws DAOException;
+    
+    public SailentFeature getSailentById(int id)throws DAOException;
+    
+    public OtNote saveOtNote(OtNote otNote)throws DAOException;
+    
+    public List<OtNote> listOtNote(int id)throws DAOException;
+    
 }

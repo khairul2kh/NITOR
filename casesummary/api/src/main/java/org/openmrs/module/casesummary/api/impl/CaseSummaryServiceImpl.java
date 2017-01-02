@@ -19,7 +19,9 @@ import org.openmrs.api.APIException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.api.db.CaseSummaryDAO;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
+import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,5 +79,31 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
     public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId) throws APIException {
         return dao.getSelectPatiByPatientIdUsreId(userId, patientId);
     }
+
+    @Override
+    public SailentFeature saveSailentFeat(SailentFeature sailentFeature) throws APIException {
+        return dao.saveSailentFeat(sailentFeature);
+    }
+
+    @Override
+    public SelectPatient getSelPatientById(int id) throws APIException {
+        return dao.getSelPatientById(id);
+    }
+
+    @Override
+    public SailentFeature getSailentById(int id) throws APIException {
+        return dao.getSailentById(id);
+    }
+
+    @Override
+    public OtNote saveOtNote(OtNote otNote) throws APIException {
+        return dao.saveOtNote(otNote);
+    }
+
+    @Override
+    public List<OtNote> listOtNote(int id) throws APIException {
+        return dao.listOtNote(id);
+    }
+ 
 
 }
