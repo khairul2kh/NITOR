@@ -19,6 +19,7 @@ import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
+import org.openmrs.module.casesummary.model.Slide;
 
 public interface CaseSummaryDAO {
 
@@ -45,5 +46,7 @@ public interface CaseSummaryDAO {
     public OtNote saveOtNote(OtNote otNote)throws DAOException;
     
     public List<OtNote> listOtNote(int id)throws DAOException;
+    
+    public Slide saveSlide(Slide slide)throws DAOException;
     
 }

@@ -28,6 +28,7 @@ import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
+import org.openmrs.module.casesummary.model.Slide;
 
 /**
  * It is a default implementation of {@link CaseSummaryDAO}.
@@ -138,6 +139,12 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OtNote.class);
         criteria.add(Restrictions.eq("selectPatient.id", id));
         return criteria.list();
+    }
+
+    @Override
+    public Slide saveSlide(Slide slide) throws DAOException {
+        sessionFactory.getCurrentSession().saveOrUpdate(slide);
+        return slide;
     }
 
 }

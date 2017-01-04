@@ -75,6 +75,9 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/assets/css/b
 src="${pageContext.request.contextPath}/moduleResources/casesummary/assets/css/jquery-ui-1.11.1.js"></script>
 
 <script type="text/javascript"
+src="${pageContext.request.contextPath}/moduleResources/casesummary/assets/jquery.ajaxfileupload.js"></script>
+
+<script type="text/javascript"
 src="${pageContext.request.contextPath}/moduleResources/casesummary/assets/css/bootstrap.min-3.3.7.js"></script>
 
 <link type="text/css" rel="stylesheet"

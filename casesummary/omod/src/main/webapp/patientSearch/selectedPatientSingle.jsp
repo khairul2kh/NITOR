@@ -65,13 +65,12 @@
                             reader.onload = function(e) {
                                 $('#view')
                                         .attr('src', e.target.result)
-                                        .width(150)
+                                        .width(100)
                                         .height(100);
                             }
                             reader.readAsDataURL(input.files[0]);
                         }
                     }
-
 
                     function readURLTwo(input) {
                         if (input.files && input.files[0]) {
@@ -79,7 +78,7 @@
                             reader.onload = function(e) {
                                 $('#view1')
                                         .attr('src', e.target.result)
-                                        .width(150)
+                                        .width(100)
                                         .height(100);
                             }
                             reader.readAsDataURL(input.files[0]);
@@ -160,7 +159,13 @@
                 var diagnosis = $("#diagnosis").val();
                 var plan = $("#plan").val();
 
-                var patientId = $("#patientId").val();
+                if (diagnosis == "" || diagnosis == null) {
+                    alert("Diagnosis empty not allowed!!!");
+                    $("#diagnosis").focus();
+                    return false;
+                }
+
+                // var patientId = $("#patientId").val();
                 $.ajax({
                     url: getContextPath() + "/module/casesummary/slideSave.htm",
                     type: "POST",
@@ -176,10 +181,11 @@
                     },
                     error: function() {
                         alert("Successfully Added Slide !!!");
-
-                        //  $("#nameOfOt").val("");
+                        $("#diagnosis").val("");
+                        $("#plan").val("");
                         // $("#procedureDetail").val("");
                         //  getResult(patientId);
+                        $("#picForm").submit();
 
                     }
                 });
@@ -288,7 +294,7 @@
                                     <input type="hidden" id="id" name="id" value="${sp.id}" />
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <textarea class="form-control" rows="8" name="sailentFet" id="sailentFet" placeholder="Add Salient Feature"required >{{sf}}</textarea>
+                                            <textarea class="form-control" rows="8" name="sailentFet" id="sailentFet" placeholder="Add Salient Feature" required >{{sf}}</textarea>
                                         </div>
                                     </div>
 
@@ -305,10 +311,10 @@
 
                             <div class="tab-pane" id="2"> <!-- Slide -->
                                 <br>
-                                <form name="myForm" id="myForm" class="form-horizontal">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-sm-5">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="thumbnail">
+                                            <form name="myForm" id="myForm"  >
                                                 <div class="form-group">
                                                     <div>
                                                         <label>Diagnosis :</label>
@@ -316,59 +322,38 @@
                                                         <div class="has-error" ng-show="myForm.$dirty">
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-1"></div>
-                                            <div class="col-sm-2">
-                                                <input type="file" id="imgInp" style="display: none;" /><br>
-                                                <button class="btn btn-info" onclick="document.getElementById('imgInp').click();" />Browse..
-                                                <i class="fa fa-file-image-o" aria-hidden="true"></i>
-                                                </button>
-                                            </div>
-
-                                            <div class="col-sm-2"> <br>
-                                                <img id="view" src="#" alt="Selected Picture" />
-                                            </div>	
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-sm-5">
+                                                </div> 
                                                 <div class="form-group">
                                                     <div>
                                                         <label>Plan :</label>
                                                         <textarea class="form-control" id="plan" name="plan" rows="6" placeholder="Message"></textarea>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
 
-                                            <div class="col-sm-1"></div>
-                                            <div class="col-sm-2">
-                                                <input type="file" id="imgInp1" style="display: none;" /><br>
-                                                <button class="btn btn-info" onclick="document.getElementById('imgInp1').click();" />Browse..
-                                                <i class="fa fa-file-image-o" aria-hidden="true"></i>
-                                                </button>
-                                            </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="thumbnail">
+                                            <form action="pictureSave.htm" id="picForm" name="picForm" method="post" enctype="multipart/form-data">  
+                                                <input type="file" id="imgInp" name="imgInp" style="display: ;" /><br>
 
-                                            <div class="col-sm-2"> <br>
+                                                <img id="view" src="#" alt="Selected Picture" />
+                                                <br><br>
+                                                <input type="file" id="imgInp1" name="imgInp1" style="display:  ;" /><br>
+
                                                 <img id="view1" src="#" alt="Selected Picture" />
-                                            </div>
-
+                                                <br><br>
+                                            </form>  
                                         </div>
-
+                                        <button onclick="saveSlide('${sp.id}')"  class="btn btn-primary" >
+                                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                                        </button>
                                     </div>
-
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <button onclick="saveSlide('${sp.id}')"  class="btn btn-primary" >
-                                                <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
 
                             <div class="tab-pane" id="3"> <!-- ot note -->
-
                                 <form name="otForm" id="otForm" class="form-horizontal">
                                     <br>
                                     <div class="row">
@@ -440,9 +425,7 @@
 
                     </div>
                 </div>
-
             </div>  
-
     </body>
 
 </html>

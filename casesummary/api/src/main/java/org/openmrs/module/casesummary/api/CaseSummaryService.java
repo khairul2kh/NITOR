@@ -19,6 +19,7 @@ import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
+import org.openmrs.module.casesummary.model.Slide;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -47,5 +48,7 @@ public interface CaseSummaryService extends OpenmrsService {
     public OtNote saveOtNote(OtNote otNote)throws APIException;
     
     public List<OtNote> listOtNote(int id)throws APIException;
+    
+    public Slide saveSlide(Slide slide)throws APIException;
             
 }

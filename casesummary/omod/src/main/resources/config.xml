@@ -38,7 +38,8 @@
         PatientSearchCs.hbm.xml    
         SelectPatient.hbm.xml 
         SailentFeature.hbm.xml
-        OtNote.hbm.xml        
+        OtNote.hbm.xml   
+        Slide.hbm.xml     
 				
     </mappingFiles>
 

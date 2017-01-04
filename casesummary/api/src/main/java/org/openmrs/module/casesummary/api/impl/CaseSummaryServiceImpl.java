@@ -23,6 +23,7 @@ import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
+import org.openmrs.module.casesummary.model.Slide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,6 +104,11 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
     @Override
     public List<OtNote> listOtNote(int id) throws APIException {
         return dao.listOtNote(id);
+    }
+
+    @Override
+    public Slide saveSlide(Slide slide) throws APIException {
+        return dao.saveSlide(slide);
     }
  
 

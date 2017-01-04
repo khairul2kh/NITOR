@@ -5,10 +5,29 @@
  */
 package org.openmrs.module.casesummary.web.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.User;
@@ -17,14 +36,19 @@ import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
+import org.openmrs.module.casesummary.model.Slide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  *
@@ -34,6 +58,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CaseSummaryAjaxController {
 
     protected final Log log = LogFactory.getLog(getClass());
+
+    private static final long serialVersionUID = 1L;
+    public static final String SAVE_LOCATION = "C:/ImagesFolder/";
+    public static Integer file_name = 0;
+    public static Integer slide_id = 0;
 
     @Autowired
     CaseSummaryService caseSumService;
@@ -115,40 +144,127 @@ public class CaseSummaryAjaxController {
     public void slideSave(
             @RequestParam(value = "id", required = false) int id,
             @RequestParam(value = "diagnosis", required = false) String diagnosis,
-            @RequestParam(value = "plan", required = false) String plan) {
+            @RequestParam(value = "plan", required = false) String plan,
+            Model model) throws IOException {
+
         User u = Context.getAuthenticatedUser();
         SelectPatient sp = caseSumService.getSelPatientById(id);
 
-//        try {
-//
-//            MultipartFile filea = uploadItem.getFileData();
-//
-//            InputStream inputStream = null;
-//            OutputStream outputStream = null;
-//            if (filea.getSize() > 0) {
-//                inputStream = filea.getInputStream();
-//// File realUpload = new File("C:/");
-//                outputStream = new FileOutputStream("C:\\test111\\"
-//                        + filea.getOriginalFilename());
-//                System.out.println("====22=========");
-//                System.out.println(filea.getOriginalFilename());
-//                System.out.println("=============");
-//                int readBytes = 0;
-//                byte[] buffer = new byte[8192];
-//                while ((readBytes = inputStream.read(buffer, 0, 8192)) != -1) {
-//                    System.out.println("===ddd=======");
-//                    outputStream.write(buffer, 0, readBytes);
-//                }
-//                outputStream.close();
-//                inputStream.close();
-//                session.setAttribute("uploadFile", "C:\\test111\\" + filea.getOriginalFilename());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Slide s = new Slide();
+        s.setSelectPatient(sp);
+        s.setPlan(plan);
+        s.setDiagnosis(diagnosis);
+        s.setCreator(u.getUserId());
+        s.setCreatedDate(new Date());
+        caseSumService.saveSlide(s);
+        file_name = sp.getId();
+        System.out.println("******************Test--" + file_name);
 
-        //return "/module/casesummary/selectedPatientSingle";
+        //return s;
     }
 
+    @RequestMapping(value = "/module/casesummary/pictureSave.htm", method = RequestMethod.POST)
+    public void FileUpload(@RequestParam("imgInp") MultipartFile multipartFile,
+            @RequestParam("imgInp1") MultipartFile multipartFile1,
+            Model model) {
+        long fileSize = multipartFile.getSize();
+
+        String fileName = multipartFile.getOriginalFilename();
+        if ((multipartFile != null && multipartFile.getSize() > 0)) {
+            if (saveFile(multipartFile)) {
+                model.addAttribute("fileName", fileName);
+                model.addAttribute("fileSize", fileSize);
+            }
+        }
+
+        long fileSize1 = multipartFile1.getSize();
+        String fileName1 = multipartFile1.getOriginalFilename();
+
+        if ((multipartFile1 != null && multipartFile1.getSize() > 0)) {
+            if (saveFile(multipartFile1)) {
+                model.addAttribute("fileName", fileName1);
+                model.addAttribute("fileSize", fileSize1);
+            }
+        }
+
+    }
+
+    public boolean saveFile(MultipartFile multipartFile) {
+        boolean result = false;
+        //set the saved location and create a directory location
+        String fileName = multipartFile.getOriginalFilename();
+        String location = SAVE_LOCATION;
+        File pathFile = new File(location);
+        //check if directory exist, if not, create directory
+        if (!pathFile.exists()) {
+            pathFile.mkdir();
+        }
+        //create the actual file
+        //pathFile = new File(location + fileName);
+
+        Calendar now = Calendar.getInstance();
+        String curYear = String.valueOf(now.get(Calendar.YEAR));
+
+        pathFile = new File(location
+                + file_name.toString()
+                + "-"
+                + slide_id
+                + "-"
+                + curYear
+                + "-"
+                + fileName);
+
+        //save the actual file
+        // byte a[]=1;
+        try {
+            multipartFile.transferTo(pathFile);
+
+//            OtNote on = new OtNote();
+//            //on.setSelectPatient(file_na);
+//            on.setNameOfOt(pathFile.toString());
+//            on.setCreatedDate(new Date());
+//            caseSumService.saveOtNote(on);
+            result = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+//    protected String multipartFileHandler(MultipartHttpServletRequest request, String col) {
+//
+//        MultipartFile multipartFile = request.getFile(col + "OBJ");
+//
+//        File outputFileBillId = new File(request.getSession().getServletContext().getRealPath("/barcode/" + dpsb.getBillId() + ".png"));
+//        
+//        if ((multipartFile != null && multipartFile.getSize() > 0)) {
+//
+//            try {
+//                String fileCaption = multipartFile.getOriginalFilename();
+//                //File contx = new File(request.getServletContext().getRealPath("/"));
+////                String root=request.getServletContext().getRealPath("/");
+//
+//                String parent = getOuterParentPath(request);
+//                File file = new File(parent
+//                        + File.separator
+//                        + "repositories"
+//                        + File.separator
+//                        + "files"
+//                        + File.separator
+//                        + fileCaption);
+//
+//                FileUtils.writeByteArrayToFile(file, multipartFile.getBytes());
+//                System.out.println("Go to the location:  " + file.toString() + " on your computer has been stored.");
+//                // currObject.setPicFile("/pics/" + fileCaption);
+//                //return "/" + dir + "/" + fileCaption;
+//                return fileCaption;
+//            } catch (Exception e) {
+//                System.out.println("set " + col + " err: " + e);
+//                //currObject.setPicFile("err: " + e);
+//                return "err: " + e;
+//            }
+//        }
+//        return "";
+//    }
     ////// /////////////////////////////////////
 }
