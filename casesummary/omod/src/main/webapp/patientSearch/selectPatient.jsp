@@ -25,7 +25,6 @@
             var myApp = angular.module("myApp", []);
             myApp.controller('UserController', ['$scope', '$http', function($scope, $http) {
 
-
                     //$scope.docName=${docPro.doctorName};
                     //   $scope.docorProfile = [{doctorName: "khairul", designation: "Hasan Zamil", session: "jakir@gmail.com"}];
                 }]);
@@ -99,7 +98,7 @@
                     },
                     success: function() {
                         alert("Successfully Added!!!");
-                        window.location = "selectedPatientSingle.htm?patientId="+patientId;
+                        window.location = "selectedPatientSingle.htm?patientId=" + patientId;
                     },
                     error: function() {
 
@@ -248,8 +247,15 @@
                             <label class="control-label col-sm-2"   for="award">Admitted Ward </label>
                             <label class="control-label col-sm-1"   >:</label>
                             <div class="col-sm-8"> 
-                                <input type="text" style="padding-left:10px;" class="form-control" id="award" name="award" >
+                                <!--  <input type="text" style="padding-left:10px;" class="form-control" id="award" name="award" > -->
+                                <select id="award" name="award"   class="selectOption form-control" >  
+                                    <option> -- Please Select IPD Ward -- </option>
+                                    <c:forEach items="${ipdList}" var="ipd">
+                                        <option value="${ipd.answerConcept.name}">${ipd.answerConcept.name} </option>
+                                    </c:forEach>
+                                </select>
                             </div>
+
                         </div>
 
                         <div class="form-group">

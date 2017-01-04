@@ -61,6 +61,7 @@ public class CaseSummaryAjaxController {
 
     private static final long serialVersionUID = 1L;
     public static final String SAVE_LOCATION = "C:/ImagesFolder/";
+    //   public static final String SAVE_LOCATION = "/root/ImagesFolder/";
     public static Integer file_name = 0;
     public static Integer slide_id = 0;
 
@@ -215,10 +216,8 @@ public class CaseSummaryAjaxController {
                 + fileName);
 
         //save the actual file
-        // byte a[]=1;
         try {
             multipartFile.transferTo(pathFile);
-
 //            OtNote on = new OtNote();
 //            //on.setSelectPatient(file_na);
 //            on.setNameOfOt(pathFile.toString());

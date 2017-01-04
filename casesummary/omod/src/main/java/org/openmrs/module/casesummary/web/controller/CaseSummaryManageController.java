@@ -79,30 +79,7 @@ public class CaseSummaryManageController {
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
-//    @RequestMapping(value = "/module/casesummary/findDocPro.htm", method = RequestMethod.GET)
-//    public ResponseEntity<DoctorProfile> getDocPro(@PathVariable("id") int userId) {
-//        //System.out.println("Creating User " + user.getUsername());
-//        DoctorProfile docPro = caseSumService.docProFindByUserId(userId);
-//        if (docPro == null) {
-//            System.out.println("Doctor profile" + userId + "Not found");
-//            return new ResponseEntity<DoctorProfile>(docPro, HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<DoctorProfile>(docPro, HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(value = "/module/casesummary/findDoc.htm", method = RequestMethod.GET)
-//    public String listCertificate(@RequestParam(value = "id", required = false) int id,
-//            Model model) {
-//        // map.put("registration", new BirthRegistration());
-//        DoctorProfile docPro = caseSumService.docProFindByUserId(id);
-//        model.addAttribute("docPro", docPro);
-//        System.out.println("*********docPro" + docPro);
-//
-//        return "module/casesummary/main/docUpdate";
-//
-//    }
- 
-    
+     
     @RequestMapping(value = "/module/casesummary/update.form", method = RequestMethod.POST)
     public String updateDoc( 
             @ModelAttribute("doctorProfile") DoctorProfile doctorProfile, BindingResult result,

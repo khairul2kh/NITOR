@@ -13,6 +13,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
@@ -22,6 +23,7 @@ import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
+import org.openmrs.module.casesummary.util.CaseSummaryConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -68,6 +70,9 @@ public class PatientSerachInSystem {
         PatientSearchCs ps = caseSumService.getPatientSerByPatientId(patientId);
         model.addAttribute("ps", ps);
 
+        Concept ipdList = Context.getConceptService().getConceptByName(CaseSummaryConstants.IPD_WARD_LIST);
+        model.addAttribute("ipdList", ipdList.getAnswers());
+
         return "module/casesummary/patientSearch/selectPatient";
     }
 
@@ -110,28 +115,27 @@ public class PatientSerachInSystem {
         selectPatient.setCreatedDate(new Date());
         selectPatient.setUserId(u);
         caseSumService.saveSlectPatient(selectPatient);
-        
+
         return "redirect:/module/casesummary/main.form";
     }
-    
-     @RequestMapping(value = "/module/casesummary/selectedPatientSingle.htm", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/module/casesummary/selectedPatientSingle.htm", method = RequestMethod.GET)
     public String selectedPatientSingle(@RequestParam("patientId") int patientId, ModelMap model) {
         User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
         int userId = u.getUserId();
-        SelectPatient sp=caseSumService.getSelectPatiByPatientIdUsreId(userId, patientId);
-        model.addAttribute("sp",sp);
-        model.addAttribute("age",sp.getPatientId().getAge());
-        SailentFeature sf=caseSumService.getSailentById(sp.getId());
-        model.addAttribute("sf",sf);        
-        List<OtNote> listOtNote=caseSumService.listOtNote(sp.getId());
-        model.addAttribute("listOtNote",listOtNote);
+        SelectPatient sp = caseSumService.getSelectPatiByPatientIdUsreId(userId, patientId);
+        model.addAttribute("sp", sp);
+        model.addAttribute("age", sp.getPatientId().getAge());
+        SailentFeature sf = caseSumService.getSailentById(sp.getId());
+        model.addAttribute("sf", sf);
+        List<OtNote> listOtNote = caseSumService.listOtNote(sp.getId());
+        model.addAttribute("listOtNote", listOtNote);
         return "module/casesummary/patientSearch/selectedPatientSingle";
     }
 
-    
     @RequestMapping(value = "/module/casesummary/selectedPatientList.htm", method = RequestMethod.GET)
-    public String selectedPatientList( ModelMap model) {
+    public String selectedPatientList(ModelMap model) {
         User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
         int userId = u.getUserId();
