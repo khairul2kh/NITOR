@@ -19,7 +19,6 @@
                     // AngularJS will populate this object with input
                     // values based on the data-ng-model mappings.
 
-
                     $scope.data = {};
                     $scope.submit = function() {
                         $http({
@@ -40,7 +39,6 @@
                                 });
                     };
 
-
                     $scope.IsVisible = false;
                     $scope.ShowHide = function() {
                         $scope.IsVisible = $scope.IsVisible ? false : true;
@@ -50,21 +48,16 @@
                     //   $scope.docorProfile = [{doctorName: "khairul", designation: "Hasan Zamil", session: "jakir@gmail.com"}];
                 }]);
 
-            // setTimeout(function() {
-            // $('#loadPage').modal('hide');
-            // }, 2000);
-
-            // $(window).load(function() {
-            // $('#loadPage').modal('show');
-            // });
-
             if (SESSION.checkSession()) {
                 $(document).ready(function() {
-                    jQuery("#searchKey").keyup(function(event) {
+                    jQuery('#pdate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
+                    jQuery("#pdate").keyup(function(event) {
                         if (event.keyCode == 13) {
-                            getPatientInSystem();
+                            getSelectPatient();
                         }
                     });
+                    
+                    getSelectPatient();
 
                     $('#myForm').formValidation({
                         framework: 'bootstrap',
@@ -136,9 +129,37 @@
                 });
             }
             ;
+
+            function getSelectPatient() {
+                var pdate = jQuery("#pdate").val();
+                if (pdate == "" || pdate == null) {
+                    alert("Please Select Presentation Date !!");
+                    $("#pdate").focus();
+                    return false;
+
+                }
+                jQuery.ajax({
+                    type: "GET",
+                    url: getContextPath() + "/module/casesummary/listSelectPat.htm",
+                    data: ({
+                        pdate: pdate
+                    }),
+                    success: function(data) {
+                        jQuery("#presenterList").html(data);
+                    },
+                });
+            }
+            ;
+
             function selectPatient(patientId) {
-               // alert(patientId);
+                // alert(patientId);
                 window.location.href = openmrsContextPath + "/module/casesummary/selectPatient.htm?patientId=" + patientId;
+            }
+            ;
+
+            function goPresentation(id) {
+                // alert(patientId);
+                window.location.href = openmrsContextPath + "/module/casesummary/selectPatientSlide.htm?id=" + id;
             }
             ;
 
@@ -151,7 +172,7 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">     
             <div class="container">
                 <div class="navbar-header" style="padding-top:12px;">
-                    <span> Welcome Mr./Ms. : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
+                    <span> Welcome : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
                 </div>
                 <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
 
@@ -196,10 +217,13 @@
         <!-- Main Body Start Here -->
         <div class="container theme-showcase" role="main" ng-controller="UserController">
 
+
+
             <div class="panel panel-success" ng-hide = "IsVisible">
-                <div class="panel-heading">Please Select Patient</div>
+                <div class="panel-heading">Selected Patient List </div>
                 <div class="panel-body"> 
-                    <div class="row">
+
+                    <div class="row">					
                         <div class="col-sm-3">
                             <div ng-hide="IsVisible">
                                 <div class="input-group" id="seracrButton">
@@ -212,28 +236,43 @@
 
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="panel panel-success" ng-hide = "IsVisible">
-                <div class="panel-heading">Selected Patient List </div>
-                <div class="panel-body"> 
-
-                    <div class="row">
                         <div class="col-sm-3">
                             <div ng-hide="IsVisible">
                                 <div class="input-group" id="seracrButton">
-                                    <input type="button"    style="text-align:left;"  value="Selected Patient List" class="form-control btn btn-info" 
+                                    <input type="button"    style="text-align:left;"  value="Selected Patient List" class="form-control btn btn-success" 
                                            onclick="location.href = 'selectedPatientList.htm';" />
                                     <span class = "input-group-addon btn"   data-toggle="modal" data-target="#" data-backdrop="static" data-keyboard="false">
-                                        <i class="glyphicon glyphicon-th-list blue" aria-hidden="true"></i>
+                                        <i class="glyphicon glyphicon-th-list green" aria-hidden="true"></i>
                                     </span>
                                 </div>
 
                             </div>
                         </div>
                     </div>
+
+                </div>
+            </div>
+
+            <div class="panel panel-info" ng-hide = "IsVisible">
+                <div class="panel-heading">Presenter List</div>
+                <div class="panel-body"> 
+                    <div class="row">
+
+                        <div class="form-group">
+
+                            <div class="col-sm-3"> 
+                                <input type="text" style="padding-left:10px;" name="pdate"  id="pdate" value="${currentDate}"  class="username form-control input-sm" placeholder="Enter date" required >                  
+                            </div>
+
+                            <div class="col-lsm-3">
+                                <button class="btn btn-info"  onClick="getSelectPatient();"  >Show List &nbsp; <i class="glyphicon glyphicon-th"></i></button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div id="presenterList" style="padding:4px;"></div> 
 
                 </div>
             </div>

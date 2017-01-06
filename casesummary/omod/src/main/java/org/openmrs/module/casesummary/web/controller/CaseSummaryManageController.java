@@ -11,6 +11,7 @@
  */
 package org.openmrs.module.casesummary.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,10 @@ public class CaseSummaryManageController {
         model.addAttribute("docPro", docPro);
         User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date d=new Date();      
+        model.addAttribute("currentDate", sdf.format(d));
         return "module/casesummary/main/mainpage";
     }
 

@@ -55,6 +55,11 @@
                 window.location.href = openmrsContextPath + "/module/casesummary/selectedPatientSingle.htm?patientId=" + patientId;
             }
             ;
+            function mainPage() {
+                // alert(patientId);
+                window.location.href = openmrsContextPath + "/module/casesummary/main.form";
+            }
+            ;
         </script>
     </head>
 
@@ -63,7 +68,7 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">     
             <div class="container">
                 <div class="navbar-header" style="padding-top:12px;">
-                    <span> Welcome Mr./Ms. : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
+                    <span> Welcome : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
                 </div>
                 <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
 
@@ -129,24 +134,17 @@
                                             <c:set var="age" value="${h.value}"/>
                                         </c:if>
                                     </c:forEach>
-                                    <tr onclick="selectPatientSingle(${sp.patientId.personId});">
+                                    <tr >
                                         <td> ${index.count}</td>
-                                        <td> ${sp.patientId.patientIdentifier.identifier}</td>
-                                        <td> ${sp.patientId.givenName} ${sp.patientId.middleName} ${sp.patientId.familyName}</td>
-                                        <td>    ${age} </td>
-                                        <td> ${sp.patientId.gender} </td>
-                                        <td> ${sp.admittedWard} </td>
-                                        <td> ${sp.admittedBed} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.patientId.patientIdentifier.identifier}</td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.patientId.givenName} ${sp.patientId.middleName} ${sp.patientId.familyName}</td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${age} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.patientId.gender} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.admittedWard} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.admittedBed} </td>
                                         <td> 
-
-                                            <button class="btn btn-primary btn-sm sailentfet" data-toggle="modal" data-backdrop="static" data-keyboard="false"
-                                                    data-id="${sp.patientId.personId}" >Salient Feature</button> 
-
                                             <button class="btn btn-success btn-sm slide" data-toggle="modal" data-backdrop="static" data-keyboard="false"
-                                                    data-id="${sp.patientId.personId}" >Add Slide</button> 
-
-                                            <button class="btn btn-success btn-sm slide" data-toggle="modal" data-backdrop="static" data-keyboard="false"
-                                                    data-id="${sp.patientId.personId}" >OT Note</button>
+                                                    data-id="${sp.patientId.personId}" >Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>						
                                 </c:forEach>
@@ -155,7 +153,8 @@
                     </form>
                 </div>
             </div>
-        </div>  
+            <button class="btn btn-info" onclick="mainPage()"> <i class="fa fa-backward" aria-hidden="true"></i> Back </button>
+        </div>   
 
         <!-- modal for sailent feature -->
         <div class="modal fade" id="sailentFeature" role="dialog"  >

@@ -165,7 +165,6 @@
                     return false;
                 }
 
-                // var patientId = $("#patientId").val();
                 $.ajax({
                     url: getContextPath() + "/module/casesummary/slideSave.htm",
                     type: "POST",
@@ -176,21 +175,39 @@
                         plan: plan
                     },
                     success: function() {
-                        alert("Successfully Added Slide!");
-                        //window.location = "selectedPatientSingle.htm?patientId="+patientId;
+                        alert("Successfully Added Slide !!!");
                     },
                     error: function() {
                         alert("Successfully Added Slide !!!");
                         $("#diagnosis").val("");
                         $("#plan").val("");
-                        // $("#procedureDetail").val("");
-                        //  getResult(patientId);
-                        $("#picForm").submit();
-
+                        savePictures();
+                        //  $("#picForm").submit();
                     }
                 });
             }
             ;
+
+            function savePictures() {
+                $.ajax({
+                    url: 'pictureSave.htm',
+                    type: "POST",
+                    data: new FormData(document.getElementById("picForm")),
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false
+                }).done(function(data) {
+                    location.reload();
+                    jQuery('#imgInp').val("");
+                    jQuery('#imgInp1').val("");
+                }).fail(function(jqXHR, textStatus) {
+                    //alert(jqXHR.responseText);
+                    //  alert('File upload failed ...');
+                    location.reload();
+                    jQuery('#imgInp').val("");
+                    jQuery('#imgInp1').val("");
+                });
+            }
 
             function getResult(patientId) {
                 jQuery("#defaultResult").hide();
@@ -213,7 +230,7 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">     
             <div class="container">
                 <div class="navbar-header" style="padding-top:12px;">
-                    <span> Welcome Mr./Ms. : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
+                    <span> Welcome : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
                 </div>
                 <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
                     <ul class="nav navbar-nav navbar-right">

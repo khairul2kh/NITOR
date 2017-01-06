@@ -26,6 +26,7 @@
         <property name="createdDate" column="created_date" />
         <many-to-one name="userId" column="user_id" class="org.openmrs.User"
                      foreign-key="fk_cs_select_patient_user_id" />
+        <property name="status" column="status" />
         
     </class>
 </hibernate-mapping>

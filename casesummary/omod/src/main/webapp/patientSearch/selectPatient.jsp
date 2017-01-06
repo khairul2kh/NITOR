@@ -3,16 +3,13 @@
     Created on : Dec 26, 2016, 3:29:18 PM
     Author     : Khairul
 --%>
-
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/headerMinimal.jsp"%>
 <%@ include file="../includes/js_css.jsp"%> 
 
 <html>
     <head>  
-
         <title>Doctor Profile Entry Form</title>  
-
         <style>
             .form-horizontal .control-label{
                 font-size:14px;
@@ -115,7 +112,7 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">     
             <div class="container">
                 <div class="navbar-header" style="padding-top:12px;">
-                    <span> Welcome Mr./Ms. : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
+                    <span> Welcome : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
                 </div>
                 <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
 

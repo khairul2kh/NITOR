@@ -30,6 +30,11 @@
         <point>org.openmrs.gutter.tools</point>
         <class>@MODULE_PACKAGE@.extension.html.CaseSummaryHeader</class>
     </extension>
+    
+    <privilege>
+        <name>Access Case Summary</name>
+        <description>Allows user to Access Case Summary Module</description>
+    </privilege>
 	
     <!-- Maps hibernate file's, if present -->
     <mappingFiles>

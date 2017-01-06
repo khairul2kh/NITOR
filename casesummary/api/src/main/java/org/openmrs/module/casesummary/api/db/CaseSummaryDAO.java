@@ -11,6 +11,7 @@
  */
 package org.openmrs.module.casesummary.api.db;
 
+import java.util.Date;
 import java.util.List;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
@@ -48,5 +49,13 @@ public interface CaseSummaryDAO {
     public List<OtNote> listOtNote(int id)throws DAOException;
     
     public Slide saveSlide(Slide slide)throws DAOException;
+    
+    public List<SelectPatient> listSelPatientByDate(Date date)throws DAOException;
+    
+    public List<Slide> listSlideBySelPatId(int id)throws DAOException;
+    
+    public Slide getSlideLastId(int userId)throws DAOException;
+    
+    public Slide getSlideById(int id)throws DAOException;
     
 }

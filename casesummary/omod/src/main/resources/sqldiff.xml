@@ -95,7 +95,7 @@
             `date` DATE DEFAULT NULL,
             `time` VARCHAR(20) DEFAULT NULL,
             `name_of_ot` VARCHAR(20) DEFAULT NULL,
-            `procedure_detail` VARCHAR(20) DEFAULT NULL,
+            `procedure_detail` VARCHAR(500) DEFAULT NULL,
             `created_date` DATETIME DEFAULT NULL,
             `creator` INT(11) DEFAULT NULL,
             PRIMARY KEY (`id`),
@@ -114,10 +114,12 @@
             CREATE TABLE IF NOT EXISTS `cs_slide` (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
             `select_patient_id` INT(11) DEFAULT NULL,
-            `diagnosis` VARCHAR(20) DEFAULT NULL,
-            `plan` VARCHAR(400) DEFAULT NULL,
+            `diagnosis` VARCHAR(200) DEFAULT NULL,
+            `plan` VARCHAR(500) DEFAULT NULL,
             `created_date` DATETIME DEFAULT NULL,
             `creator` INT(11) DEFAULT NULL,
+            `image_name_one` VARCHAR(200) DEFAULT NULL,
+            `image_name_two` VARCHAR(200) DEFAULT NULL,
             PRIMARY KEY (`id`),
             KEY `fk_cs_slide_selectpatient_id` (`select_patient_id`),
             CONSTRAINT `fk_cs_slide_selectpatient_id` FOREIGN KEY (`select_patient_id`) REFERENCES `cs_select_patient` (`id`)
@@ -125,20 +127,31 @@
         </sql>
     </diff>
     
+    <diff>
+        <version>1.0.7</version>
+        <author>Md. Khairul Islam</author>
+        <date>06 Jan 2017</date>
+        <description>
+            Add column  For cs_select_patient table
+        </description>
+        <sql>
+            ALTER TABLE `cs_select_patient`
+            ADD(`status` bit(1) DEFAULT NULL);
+        </sql>
+    </diff>
+    
 <!--    <diff>
         <version>1.0.7</version>
-        <author>Md. Khaiurl Islam</author>
-        <date>03 Jan 2017</date>
-        <description>Slide Image store name</description>
+        <author>Md. Khairul Islam</author>
+        <date>06 Jan 2017</date>
+        <description>
+            Add column  For cs_select_patient table
+        </description>
         <sql>
-            CREATE TABLE IF NOT EXISTS `cs_slide_image` (
-            `id` INT(11) NOT NULL AUTO_INCREMENT,
-            `select_patient_id` INT(11) DEFAULT NULL,
-            `image_name` VARCHAR(200) DEFAULT NULL,
-            `slide_id` INT(11) DEFAULT NULL,
-            PRIMARY KEY (`id`)
-            ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+            ALTER TABLE `cs_select_patient`
+            ADD(`status` bit(1) DEFAULT NULL);
         </sql>
     </diff>-->
+    
      
 </sqldiff>

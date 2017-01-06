@@ -11,7 +11,12 @@
  */
 package org.openmrs.module.casesummary.api.db.hibernate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +34,8 @@ import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
 import org.openmrs.module.casesummary.model.Slide;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
 
 /**
  * It is a default implementation of {@link CaseSummaryDAO}.
@@ -145,6 +152,47 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
     public Slide saveSlide(Slide slide) throws DAOException {
         sessionFactory.getCurrentSession().saveOrUpdate(slide);
         return slide;
+    }
+
+    @Override
+    public List<SelectPatient> listSelPatientByDate(Date date) throws DAOException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startDate = sdf.format(date) + " 00:00:00";
+        String endDate = sdf.format(date) + " 23:59:59";
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(SelectPatient.class);
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+            criteria.add(Expression.between("presentationDate",
+                    dateTimeFormatter.parse(startDate),
+                    dateTimeFormatter.parse(endDate)));
+        } catch (ParseException ex) {
+            Logger.getLogger(HibernateCaseSummaryDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return criteria.list();
+    }
+
+    @Override
+    public List<Slide> listSlideBySelPatId(int id) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Slide.class);
+        criteria.add(Restrictions.eq("selectPatient.id", id));
+        return criteria.list();
+    }
+
+    @Override
+    public Slide getSlideLastId(int userId) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Slide.class);
+        criteria.add(Restrictions.eq("creator", userId));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setFirstResult(0);
+        criteria.setMaxResults(1);
+        return (Slide) criteria.uniqueResult();
+    }
+
+    @Override
+    public Slide getSlideById(int id) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Slide.class);
+        criteria.add(Restrictions.eq("id", id));
+        return (Slide) criteria.uniqueResult();
     }
 
 }

@@ -11,6 +11,7 @@
  */
 package org.openmrs.module.casesummary.api.impl;
 
+import java.util.Date;
 import java.util.List;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
@@ -109,6 +110,26 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
     @Override
     public Slide saveSlide(Slide slide) throws APIException {
         return dao.saveSlide(slide);
+    }
+
+    @Override
+    public List<SelectPatient> listSelPatientByDate(Date date) throws APIException {
+        return dao.listSelPatientByDate(date);
+    }
+
+    @Override
+    public List<Slide> listSlideBySelPatId(int id) throws APIException {
+        return dao.listSlideBySelPatId(id);
+    }
+
+    @Override
+    public Slide getSlideLastId(int userId) throws APIException {
+        return dao.getSlideLastId(userId);
+    }
+
+    @Override
+    public Slide getSlideById(int id) throws APIException {
+        return dao.getSlideById(id);
     }
  
 

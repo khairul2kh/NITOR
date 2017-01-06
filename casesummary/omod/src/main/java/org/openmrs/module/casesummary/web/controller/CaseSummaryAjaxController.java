@@ -21,6 +21,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
@@ -33,6 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
+import org.openmrs.module.casesummary.model.DoctorProfile;
 import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
@@ -61,6 +63,9 @@ public class CaseSummaryAjaxController {
 
     private static final long serialVersionUID = 1L;
     public static final String SAVE_LOCATION = "C:/ImagesFolder/";
+
+    User u = Context.getAuthenticatedUser();
+
     //   public static final String SAVE_LOCATION = "/root/ImagesFolder/";
     public static Integer file_name = 0;
     public static Integer slide_id = 0;
@@ -130,14 +135,13 @@ public class CaseSummaryAjaxController {
 
     @RequestMapping(value = "/module/casesummary/otnoteajax.htm", method = RequestMethod.GET)
     public String selectedPatientSingle(@RequestParam("patientId") int patientId, ModelMap model) {
-        User u = Context.getAuthenticatedUser();
+       // User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
         int userId = u.getUserId();
         SelectPatient sp = caseSumService.getSelectPatiByPatientIdUsreId(userId, patientId);
 
         List<OtNote> listOtNote = caseSumService.listOtNote(sp.getId());
         model.addAttribute("listOtNote", listOtNote);
-
         return "module/casesummary/ajax/otnoteresult";
     }
 
@@ -148,9 +152,7 @@ public class CaseSummaryAjaxController {
             @RequestParam(value = "plan", required = false) String plan,
             Model model) throws IOException {
 
-        User u = Context.getAuthenticatedUser();
         SelectPatient sp = caseSumService.getSelPatientById(id);
-
         Slide s = new Slide();
         s.setSelectPatient(sp);
         s.setPlan(plan);
@@ -159,22 +161,31 @@ public class CaseSummaryAjaxController {
         s.setCreatedDate(new Date());
         caseSumService.saveSlide(s);
         file_name = sp.getId();
+
         System.out.println("******************Test--" + file_name);
 
-        //return s;
     }
 
     @RequestMapping(value = "/module/casesummary/pictureSave.htm", method = RequestMethod.POST)
     public void FileUpload(@RequestParam("imgInp") MultipartFile multipartFile,
             @RequestParam("imgInp1") MultipartFile multipartFile1,
+            HttpServletRequest request, HttpServletResponse response,
             Model model) {
+        
+        Slide slide = caseSumService.getSlideLastId(u.getUserId());
+        
+        Calendar now = Calendar.getInstance();
+        String curYear = String.valueOf(now.get(Calendar.YEAR));
+        
+        String fullName=file_name.toString()+"-"+slide.getId()+"-"+curYear;
+        
         long fileSize = multipartFile.getSize();
-
         String fileName = multipartFile.getOriginalFilename();
         if ((multipartFile != null && multipartFile.getSize() > 0)) {
-            if (saveFile(multipartFile)) {
-                model.addAttribute("fileName", fileName);
-                model.addAttribute("fileSize", fileSize);
+            if (saveFile(multipartFile, request)) {
+               
+                slide.setImgNameOne(fullName+"-"+fileName);
+                caseSumService.saveSlide(slide);
             }
         }
 
@@ -182,47 +193,40 @@ public class CaseSummaryAjaxController {
         String fileName1 = multipartFile1.getOriginalFilename();
 
         if ((multipartFile1 != null && multipartFile1.getSize() > 0)) {
-            if (saveFile(multipartFile1)) {
-                model.addAttribute("fileName", fileName1);
-                model.addAttribute("fileSize", fileSize1);
+            if (saveFile(multipartFile1, request)) {
+                
+                slide.setImgNameTwo(fullName+"-"+fileName1);
+                caseSumService.saveSlide(slide);
             }
         }
-
     }
 
-    public boolean saveFile(MultipartFile multipartFile) {
+    public boolean saveFile(MultipartFile multipartFile, HttpServletRequest request) {
+        String fileLocation = request.getSession().getServletContext().getRealPath("/imageFolder/");
         boolean result = false;
-        //set the saved location and create a directory location
         String fileName = multipartFile.getOriginalFilename();
-        String location = SAVE_LOCATION;
-        File pathFile = new File(location);
-        //check if directory exist, if not, create directory
+        File pathFile = new File(fileLocation);
         if (!pathFile.exists()) {
             pathFile.mkdir();
         }
-        //create the actual file
-        //pathFile = new File(location + fileName);
-
         Calendar now = Calendar.getInstance();
         String curYear = String.valueOf(now.get(Calendar.YEAR));
 
-        pathFile = new File(location
+        Slide s = caseSumService.getSlideLastId(u.getUserId());
+
+        pathFile = new File(pathFile
+                + File.separator
                 + file_name.toString()
                 + "-"
-                + slide_id
+                + s.getId()
                 + "-"
                 + curYear
                 + "-"
                 + fileName);
-
+         String st = Integer.toString(s.getId());
         //save the actual file
         try {
             multipartFile.transferTo(pathFile);
-//            OtNote on = new OtNote();
-//            //on.setSelectPatient(file_na);
-//            on.setNameOfOt(pathFile.toString());
-//            on.setCreatedDate(new Date());
-//            caseSumService.saveOtNote(on);
             result = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -230,40 +234,51 @@ public class CaseSummaryAjaxController {
         return result;
     }
 
-//    protected String multipartFileHandler(MultipartHttpServletRequest request, String col) {
-//
-//        MultipartFile multipartFile = request.getFile(col + "OBJ");
-//
-//        File outputFileBillId = new File(request.getSession().getServletContext().getRealPath("/barcode/" + dpsb.getBillId() + ".png"));
-//        
-//        if ((multipartFile != null && multipartFile.getSize() > 0)) {
-//
-//            try {
-//                String fileCaption = multipartFile.getOriginalFilename();
-//                //File contx = new File(request.getServletContext().getRealPath("/"));
-////                String root=request.getServletContext().getRealPath("/");
-//
-//                String parent = getOuterParentPath(request);
-//                File file = new File(parent
-//                        + File.separator
-//                        + "repositories"
-//                        + File.separator
-//                        + "files"
-//                        + File.separator
-//                        + fileCaption);
-//
-//                FileUtils.writeByteArrayToFile(file, multipartFile.getBytes());
-//                System.out.println("Go to the location:  " + file.toString() + " on your computer has been stored.");
-//                // currObject.setPicFile("/pics/" + fileCaption);
-//                //return "/" + dir + "/" + fileCaption;
-//                return fileCaption;
-//            } catch (Exception e) {
-//                System.out.println("set " + col + " err: " + e);
-//                //currObject.setPicFile("err: " + e);
-//                return "err: " + e;
-//            }
-//        }
-//        return "";
-//    }
-    ////// /////////////////////////////////////
+    @RequestMapping(value = "/module/casesummary/listSelectPat.htm", method = RequestMethod.GET)
+    public String serachPatient(@RequestParam(value = "pdate", required = false) String pdate,
+            ModelMap model) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = sdf.parse(pdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<SelectPatient> listSP = caseSumService.listSelPatientByDate(date);
+        model.addAttribute("listSelPat", listSP);
+
+        return "module/casesummary/presentation/finalPresentationList";
+    }
+
+    @RequestMapping(value = "/module/casesummary/selectPatientSlide.htm", method = RequestMethod.GET)
+    public String selectPatientSlide(@RequestParam(value = "id", required = false) int id,
+            ModelMap model) {
+        User u = Context.getAuthenticatedUser();
+        model.addAttribute("u", u);
+
+        DoctorProfile dp = caseSumService.docProFindByUserId(u.getUserId());
+        model.addAttribute("dp", dp);
+
+        SelectPatient sp = caseSumService.getSelPatientById(id);
+        model.addAttribute("sp", sp);
+        model.addAttribute("age", sp.getPatientId().getAge());
+        model.addAttribute("sex", sp.getPatientId().getGender());
+
+        SailentFeature sf = caseSumService.getSailentById(id);
+        model.addAttribute("sf", sf);
+
+        List<Slide> listSlide = caseSumService.listSlideBySelPatId(id);
+        model.addAttribute("listSlide", listSlide);
+        
+        List<OtNote> otNote=caseSumService.listOtNote(id);
+        model.addAttribute("listOtNote", otNote);
+        
+        sp.setStatus(true);
+        caseSumService.saveSlectPatient(sp);
+
+        return "module/casesummary/presentation/readyPresentation";
+    }
+
 }

@@ -11,6 +11,7 @@
  */
 package org.openmrs.module.casesummary.api;
 
+import java.util.Date;
 import java.util.List;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
@@ -50,5 +51,14 @@ public interface CaseSummaryService extends OpenmrsService {
     public List<OtNote> listOtNote(int id)throws APIException;
     
     public Slide saveSlide(Slide slide)throws APIException;
+    
+    public List<SelectPatient> listSelPatientByDate(Date date)throws APIException;
+    
+    public List<Slide> listSlideBySelPatId(int id)throws APIException;
+    
+    public Slide getSlideLastId(int userId)throws APIException;
+    
+    public Slide getSlideById(int id)throws APIException;
+    
             
 }

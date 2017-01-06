@@ -44,6 +44,15 @@ public class SelectPatient implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
     private User userId;
+    private boolean status;
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public int getId() {
         return id;

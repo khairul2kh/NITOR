@@ -32,6 +32,24 @@ public class Slide {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
     private int creator;
+    private String imgNameOne;
+    private String imgNameTwo;
+
+    public String getImgNameOne() {
+        return imgNameOne;
+    }
+
+    public void setImgNameOne(String imgNameOne) {
+        this.imgNameOne = imgNameOne;
+    }
+
+    public String getImgNameTwo() {
+        return imgNameTwo;
+    }
+
+    public void setImgNameTwo(String imgNameTwo) {
+        this.imgNameTwo = imgNameTwo;
+    }
 
     public int getId() {
         return id;
