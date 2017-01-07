@@ -21,7 +21,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name = "cs_ot_note")
-public class OtNote implements Serializable{
+public class OtNote implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -36,6 +36,24 @@ public class OtNote implements Serializable{
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createdDate;
     private int creator;
+    private String nameOfSurgeon;
+    private String typeAnesthesia;
+
+    public String getNameOfSurgeon() {
+        return nameOfSurgeon;
+    }
+
+    public void setNameOfSurgeon(String nameOfSurgeon) {
+        this.nameOfSurgeon = nameOfSurgeon;
+    }
+
+    public String getTypeAnesthesia() {
+        return typeAnesthesia;
+    }
+
+    public void setTypeAnesthesia(String typeAnesthesia) {
+        this.typeAnesthesia = typeAnesthesia;
+    }
 
     public int getId() {
         return id;

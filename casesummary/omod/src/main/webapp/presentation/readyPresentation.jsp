@@ -18,21 +18,16 @@
                 text-align:left;
             }
             .form-control{color:black;}
-
-
         </style>
 
         <script>
             var myApp = angular.module("myApp", []);
             myApp.controller('UserController', ['$scope', '$http', function($scope, $http) {
-
                     $scope.IsVisible = false;
                     $scope.ShowHide = function() {
                         $scope.IsVisible = $scope.IsVisible ? false : true;
                     };
-
                     $scope.index = 1;
-
                     //$scope.docName=${docPro.doctorName};
                     //   $scope.docorProfile = [{doctorName: "khairul", designation: "Hasan Zamil", session: "jakir@gmail.com"}];
                 }]);
@@ -40,7 +35,6 @@
             if (SESSION.checkSession()) {
 
                 $(document).ready(function() {
-
                     var divs = $('.mydivs>div');
                     var now = 0; // currently shown div
                     divs.hide().first().show();
@@ -78,7 +72,6 @@
                 <span> Welcome : ${u.person.givenName} ${u.person.middleName} ${u.person.familyName} </span>
             </div>
             <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
-
                 <ul class="nav navbar-nav navbar-right">
                     <li ui-sref-active="active">
                         <a ui-sref="home" href="${pageContext.request.contextPath}/">
@@ -116,13 +109,13 @@
 
         <div class="panel panel-info">
             <div class="panel-body"> 
-
+                
                 <div class="mydivs">
 
                     <div>
                         <div class="row"   id="div1">
-                            <div class="col-sm-12"> <!-- first column -->
-                                <div class="row">  1
+                            <div class="col-sm-12"> <!-- first slide -->
+                                <div class="row">  
                                     <div class="col-sm-2 col-md-2">  </div>
                                     <div class="col-sm-8 col-md-8">									 
                                         <span style="font-size:18px; text-align:center; color:green;"> Case Presentation Of <br> ${sp.unit}</span> <hr>	
@@ -152,8 +145,8 @@
 
                     <div>
                         <div class="row"   id="div2">
-                            <div class="col-sm-12"> <!-- first column -->
-                                <div class="row">2
+                            <div class="col-sm-12"> <!-- second slide -->
+                                <div class="row">
                                     <div class="col-sm-2 col-md-2">  </div>
                                     <div class="col-sm-8 col-md-8">
                                         <span style="font-size:18px; text-align:center; color:green;"> Particulars 0f The Patient</span> <hr>	
@@ -206,7 +199,7 @@
                     </div>
 
                     <c:forEach items="${listSlide}" var="ls" >
-                        <div>
+                        <div> <!-- slide with image -->
                             <div class="row">
                                 <div class="col-sm-5 col-md-5">
                                     <div class="thumbnail">
@@ -232,7 +225,7 @@
                     </c:forEach>
 
                     <div>
-                        <div class="row">
+                        <div class="row"> <!-- OT Note -->
                             <div class="col-sm-12 col-md-10">
                                 <span style="font-size:18px; text-align:center; color:green;"> OT Note </span> <hr>
                                 <table class="table">
@@ -261,25 +254,17 @@
                             <div class="col-sm-2 col-md-2"> <span style="font-size:20px;"> The End </span> </div>
                             <div class="col-sm-4 col-md-4"> </div>
                         </div>
-                        <br><br><br><br>
-
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4"> </div>
-                            <div class="col-sm-2 col-md-2"> <button class="btn btn-info" onclick="mainPage()"> Home <i class="glyphicon glyphicon-home"></i> </button> </div>
-                            <div class="col-sm-4 col-md-4"> </div>
-                        </div>
                     </div>
-
                 </div>	 
             </div>
         </div> 
 
-        <div class="row col-sm-2 col-md-2">
-            <button class="btn btn-success" name="prev">Previous</button>
+        <div class="row col-sm-4 col-md-4">
+            <button class="btn btn-success" name="prev"> <i class="fa fa-backward" aria-hidden="true"></i> Previous</button>
+            <button name="next" class="btn btn-success">Next <i class="fa fa-forward" aria-hidden="true"></i> </button>
         </div>
-        <div class="row col-sm-8 col-md-8"></div>
         <div class="row col-sm-2 col-md-2">
-            <button name="next" class="btn btn-success">Next </button>
+            <button class="btn btn-info" onclick="mainPage()"> <i class="fa fa-th" aria-hidden="true"></i>  Presentation List </button>
         </div>
 
     </div>  

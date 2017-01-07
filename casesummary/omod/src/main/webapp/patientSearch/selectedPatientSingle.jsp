@@ -29,6 +29,7 @@
                 background-color: #428bca;
             }
             .nav-tabs {background-color:;}
+            #follUpImg1, #follUpImg2  { display: none; }
         </style>
 
         <script>
@@ -58,7 +59,7 @@
                         $('#slideForm').modal('show');
                     });
 
-
+                    /// Slide 
                     function readURL(input) {
                         if (input.files && input.files[0]) {
                             var reader = new FileReader();
@@ -91,6 +92,53 @@
 
                     $("#imgInp1").change(function() {
                         readURLTwo(this);
+                    });
+
+                    ////// End slide
+
+                    /////// Follow up
+                    function follImage1(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                $('#follView')
+                                        .attr('src', e.target.result)
+                                        .width(100)
+                                        .height(100);
+                            }
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+
+                    function follImage2(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                $('#follView1')
+                                        .attr('src', e.target.result)
+                                        .width(100)
+                                        .height(100);
+                            }
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+
+                    $("#follUpImg1").change(function() {
+                        follImage1(this);
+                    });
+
+                    $("#follUpImg2").change(function() {
+                        follImage2(this);
+                    });
+
+                    //// End Follow up
+
+                    $('#follImgBtn1').click(function() {
+                        $('#follUpImg1').click();
+                    });
+
+                    $('#follImgBtn2').click(function() {
+                        $('#follUpImg2').click();
                     });
 
                 });
@@ -127,6 +175,8 @@
                 var nameOfOt = $("#nameOfOt").val();
                 var procDet = $("#procedureDetail").val();
                 var patientId = $("#patientId").val();
+                var nameOfSur = $("#nameOfSur").val();
+                var typeAnest = $("#typeAnest").val();
                 $.ajax({
                     url: getContextPath() + "/module/casesummary/otNoteSave.htm",
                     type: "POST",
@@ -136,6 +186,8 @@
                         date: date,
                         time: time,
                         nameOfOt: nameOfOt,
+                        nameOfSur: nameOfSur,
+                        typeAnest: typeAnest,
                         procDet: procDet
                     },
                     success: function() {
@@ -148,6 +200,8 @@
                         $("#otTime").val("");
                         $("#nameOfOt").val("");
                         $("#procedureDetail").val("");
+                        $("#nameOfSur").val("");
+                        $("#typeAnest").val("");
                         getResult(patientId);
 
                     }
@@ -302,6 +356,8 @@
                             </li>
                             <li><a href="#3" data-toggle="tab">OT Note</a>
                             </li>
+                            <li><a href="#4" data-toggle="tab">Follow Up</a>
+                            </li>
                         </ul>
 
                         <div class="tab-content ">
@@ -314,7 +370,6 @@
                                             <textarea class="form-control" rows="8" name="sailentFet" id="sailentFet" placeholder="Add Salient Feature" required >{{sf}}</textarea>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <div class="col-sm-12">
                                             <button onclick="saveSailent('${sp.id}')"  class="btn btn-primary" >
@@ -323,7 +378,6 @@
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
 
                             <div class="tab-pane" id="2"> <!-- Slide -->
@@ -370,34 +424,43 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane" id="3"> <!-- ot note -->
+                            <div class="tab-pane" id="3" style="background-color:;"> <!-- ot note -->
                                 <form name="otForm" id="otForm" class="form-horizontal">
                                     <br>
                                     <div class="row">
                                         <div class="col-sm-6"> <!-- first column -->
                                             <div class="form-group">
-                                                <label class="control-label col-sm-3 left"  >Date :</label>
+                                                <label class="control-label col-sm-4 left"  >Date :</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control input-sm" name="otDate" id="otDate" required ng-minlength="3"/>
                                                 </div>
                                             </div>
-
                                             <div class="form-group">
-                                                <label class="control-label col-sm-3"  >Time :</label>
+                                                <label class="control-label col-sm-4"  >Time :</label>
                                                 <div class="col-sm-5">
                                                     <input type="text" class="form-control input-sm" name="otTime" id="otTime" required ng-minlength="3"/>
                                                 </div>
                                             </div>
-
                                             <div class="form-group">
-                                                <label class="control-label col-sm-3 left"  >Name of OT :</label>
+                                                <label class="control-label col-sm-4 left"  >Name of OT :</label>
                                                 <div class="col-sm-7">
                                                     <input type="text" class="form-control input-sm" name="nameOfOt" id="nameOfOt" required ng-minlength="3"/>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4 left"  >Name of Surgeon :</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control input-sm" name="nameOfSur" id="nameOfSur"  />
+                                                </div>
+                                            </div>
 
-                                        <!-- sdfffffffffffffffffffffff -->
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4 left"  >Type of Anesthe. :</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control input-sm" name="typeAnest" id="typeAnest"  />
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-sm-6"> <!-- second column -->
                                             Procedure Detail
                                             <textarea class="form-control" rows="8" name="procedureDetail" id="procedureDetail" placeholder="Add Salient Feature" required > </textarea>
@@ -418,18 +481,22 @@
                                         OT List :
                                         <table class="table table-bordered" style="font-size:12px;">
                                             <tr>
-                                                <td colspan="1">#</td>
-                                                <td colspan="1">Date</td>
-                                                <td colspan="2">Time<td>
-                                                <td colspan="2">Name of OT<td>
+                                                <td >#</td>
+                                                <td >Date</td>
+                                                <td >Time</td>
+                                                <td >Name of OT</td>
+                                                <td >Name of Surgeon</td>
+                                                <td >Type of Anesthe.</td>
                                             </tr>
                                             <tbody>
                                                 <c:forEach items="${listOtNote}" var="ot" varStatus="index" >
                                                     <tr>
                                                         <td>${index.count}</td>
                                                         <td><fmt:formatDate value="${ot.date}" pattern="MM/dd/yyyy"/></td>
-                                                        <td colspan="2">${ot.time}</td>
-                                                        <td colspan="2">${ot.nameOfOt}</td>
+                                                        <td >${ot.time}</td>
+                                                        <td >${ot.nameOfOt}</td>
+                                                        <td >${ot.nameOfSurgeon}</td>
+                                                        <td >${ot.typeAnesthesia}</td>
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>
@@ -437,7 +504,79 @@
                                     </c:if> 
                                 </div>
                                 <div id="viewResult" style="padding:4px;"></div> 
-                            </div> <!-- tab content -->
+                            </div> <!-- tab ot note End -->
+
+                            <div class="tab-pane" id="4"> <!-- Follow up -->
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6">
+
+                                        <form name="myForm" id="myForm" class="form-horizontal" >
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4 left"  >Diagnosis :</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control input-sm" name="diagnosisFoll" id="diagnosisFoll"  />												 
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4 left"  >Date of Surgery :</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control input-sm" name="dateSurgery" id="dateSurgery"  />												 
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4 left"  >Date of Follow Up :</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control input-sm" name="dateFollup" id="dateFollup"  />												 
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                Comment :
+                                                <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Comment"></textarea>
+                                            </div>
+                                            <br>
+                                            <div>
+                                                Subsequent Plan :
+                                                <textarea class="form-control" id="subPlan" name="subPlan" rows="2" placeholder="Subsequent Plan"></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="thumbnail">
+                                            <form action="pictureSave.htm" class="form-horizontal" id="picForm" name="picForm" method="post" enctype="multipart/form-data">  
+
+                                                <div class="form-group">  <!-- Image one -->
+                                                    <label class="control-label col-sm-4 left"  >  
+                                                        <input type="button" class="btn btn-success" value="Browse.."  id="follImgBtn1" /> 
+                                                        <input type="file" id="follUpImg1" name="follUpImg1"   /> 
+                                                    </label>
+                                                    <div class="col-md-6">
+                                                        <img id="follView" src="#" alt="Picture Not Selecte" />											 
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group"> <!-- Image two -->
+                                                    <label class="control-label col-sm-4 left"  >
+                                                        <input type="button" class="btn btn-success" value="Browse.."  id="follImgBtn2" /> 
+                                                        <input type="file" id="follUpImg2" name="follUpImg2"   />  </label>
+
+                                                    <div class="col-md-6">
+                                                        <img id="follView1" src="#" alt="Picture Not Selecte" />										 
+                                                    </div>
+                                                </div>
+                                            </form>  
+                                        </div>
+                                        <button onclick="saveSlide('${sp.id}')"  class="btn btn-primary" >
+                                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div> <!-- main tab div -->
 
                     </div>

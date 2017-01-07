@@ -7,13 +7,15 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="../includes/js_css.jsp"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+OT List :
 <table class="table table-bordered" style="font-size:12px;">
     <tr>
-        <td colspan="1">#</td>
-        <td colspan="1">Date</td>
-        <td colspan="2">Time<td>
-        <td colspan="2">Name of OT<td>
+        <td >#</td>
+        <td >Date</td>
+        <td >Time</td>
+        <td >Name of OT</td>
+        <td >Name of Surgeon</td>
+        <td >Type of Anesthe.</td>
     </tr>
 
     <tbody>
@@ -21,8 +23,10 @@
             <tr>
                 <td>${index.count}</td>
                 <td><fmt:formatDate value="${ot.date}" pattern="MM/dd/yyyy"/></td>
-                <td colspan="2">${ot.time}</td>
-                <td colspan="2">${ot.nameOfOt}</td>
+                <td >${ot.time}</td>
+                <td  >${ot.nameOfOt}</td>
+                <td >${ot.nameOfSurgeon}</td>
+                <td >${ot.typeAnesthesia}</td>
             </tr>
         </c:forEach>
     </tbody>

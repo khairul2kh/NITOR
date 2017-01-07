@@ -17,6 +17,8 @@
         <property name="procedureDetail" column="procedure_detail" />
         <property name="creator" column="creator" />
         <property name="createdDate" column="created_date" />
+        <property name="nameOfSurgeon" column="name_of_surgeon" />
+        <property name="typeAnesthesia" column="type_anesthesia" />
         
         <many-to-one name="selectPatient" column="select_patient_id" class="org.openmrs.module.casesummary.model.SelectPatient"
                      lazy="false" foreign-key="fk_cs_ot_note_selectpatient_id" />

@@ -106,6 +106,8 @@ public class CaseSummaryAjaxController {
             @RequestParam(value = "date", required = false) String date,
             @RequestParam(value = "time", required = false) String time,
             @RequestParam(value = "nameOfOt", required = false) String nameOfOt,
+            @RequestParam(value = "nameOfSur", required = false) String nameOfSur,
+            @RequestParam(value = "typeAnest", required = false) String typeAnest,
             @RequestParam(value = "procDet", required = false) String procedureDetail) {
         User u = Context.getAuthenticatedUser();
         SelectPatient sp = caseSumService.getSelPatientById(id);
@@ -126,6 +128,8 @@ public class CaseSummaryAjaxController {
         on.setTime(time);
         on.setNameOfOt(nameOfOt);
         on.setProcedureDetail(procedureDetail);
+        on.setNameOfSurgeon(nameOfSur);
+        on.setTypeAnesthesia(typeAnest);
         on.setCreatedDate(new Date());
         on.setCreator(u.getUserId());
         caseSumService.saveOtNote(on);

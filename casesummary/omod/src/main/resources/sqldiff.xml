@@ -140,18 +140,18 @@
         </sql>
     </diff>
     
-<!--    <diff>
-        <version>1.0.7</version>
+    <diff>
+        <version>1.0.8</version>
         <author>Md. Khairul Islam</author>
         <date>06 Jan 2017</date>
         <description>
-            Add column  For cs_select_patient table
+            Add column  For name of surgeon and type of anesthesia
         </description>
         <sql>
-            ALTER TABLE `cs_select_patient`
-            ADD(`status` bit(1) DEFAULT NULL);
+            ALTER TABLE `cs_ot_note`
+            ADD(`name_of_surgeon` VARCHAR(100) DEFAULT NULL, type_anesthesia VARCHAR(50) DEFAULT NULL);
         </sql>
-    </diff>-->
+    </diff>
     
      
 </sqldiff>
