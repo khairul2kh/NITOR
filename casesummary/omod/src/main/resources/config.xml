@@ -44,7 +44,8 @@
         SelectPatient.hbm.xml 
         SailentFeature.hbm.xml
         OtNote.hbm.xml   
-        Slide.hbm.xml     
+        Slide.hbm.xml    
+        FollowUp.hbm.xml
 				
     </mappingFiles>
 

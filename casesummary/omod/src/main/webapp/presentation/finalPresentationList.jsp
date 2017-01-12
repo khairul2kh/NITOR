@@ -15,27 +15,35 @@
                     <th>Presenter Name</th>
                     <th>Unit Name</th>
                     <th>Diagnosis</th>
-                    <th width="10%">Status</th>
+                    <th  width="10%;">Status</th>
+                    <th  width="10%;">Reschedule</th>
                 </tr>
             </thead> 
             <tbody>
                 <c:forEach items="${listSelPat}" var="patient" varStatus="index">
                     <c:if test="${patient.status eq 'true'}" >
-                        <tr onclick="goPresentation('${patient.id}');">
-                            <td class="green">${index.count}</td>
-                            <td class="green"> ${patient.nameOfPresenter} </td>
-                            <td class="green"> ${patient.unit} </td>
-                            <td class="green"> ${patient.diagnosis} </td>
-                            <td>  <i class="fa fa-check fa-2x green" aria-hidden="true"></i> </td>
+                        <tr title="${patient.id}, ${patient.patientId.givenName}" >
+                            <td onclick="goPresentation('${patient.id}');" class="green">${index.count}</td>
+                            <td onclick="goPresentation('${patient.id}');" class="green"> ${patient.nameOfPresenter} </td>
+                            <td onclick="goPresentation('${patient.id}');" class="green"> ${patient.unit} </td>
+                            <td onclick="goPresentation('${patient.id}');" class="green"> ${patient.diagnosis} </td>
+                            <td onclick="goPresentation('${patient.id}');" align="center">  <i class="fa fa-check fa-2x green" aria-hidden="true"></i> </td>
+                            <td> 
+                                <input type="button" onclick="modalClick('${patient.id}');" value="Reschedule" class="btn btn-warning" /> 
+                            </td>
                         </tr>
                     </c:if>
+
                     <c:if test="${patient.status ne 'true'}" >
-                        <tr onclick="goPresentation('${patient.id}');">
-                            <td>${index.count}</td>
-                            <td> ${patient.nameOfPresenter} </td>
-                            <td> ${patient.unit} </td>
-                            <td> ${patient.diagnosis} </td>
-                            <td> Not Presentation	</td>
+                        <tr title="${patient.id}, ${patient.patientId.givenName}" >
+                            <td onclick="goPresentation('${patient.id}');">${index.count}</td>
+                            <td onclick="goPresentation('${patient.id}');" > ${patient.nameOfPresenter} </td>
+                            <td onclick="goPresentation('${patient.id}');"> ${patient.unit} </td>
+                            <td onclick="goPresentation('${patient.id}');"> ${patient.diagnosis} </td>
+                            <td onclick="goPresentation('${patient.id}');" align="center"> <i class="glyphicon glyphicon-eye-close fa-2x" aria-hidden="true"> </i> 	</td> 
+                            <td> 
+                                <input type="button" onclick="modalClick('${patient.id}');" value="Reschedule" class="btn btn-warning" /> 
+                            </td>
                         </tr>
                     </c:if>
                 </c:forEach>

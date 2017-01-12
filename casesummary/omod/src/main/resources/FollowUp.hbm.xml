@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.casesummary.model">
+
+    <class name="FollowUp" table="cs_follow_up" batch-size="500">
+
+        <id name="id" type="int" column="id"
+            unsaved-value="0">				
+        </id>		
+         
+        <property name="diagnosis" column="diagnosis" />  
+        <property name="dateOfSurgery" column="date_of_surg" />
+        <property name="dateOfFollowUp" column="date_of_foll" />
+        <property name="comment" column="comment" />
+        <property name="subsequentPlan" column="subse_plan" />         
+        <property name="creator" column="creator" />
+        <property name="createdDate" column="created_date" />
+        <property name="imgNameOne" column="image_name_one" />
+        <property name="imgNameTwo" column="image_name_two" />
+        
+        <many-to-one name="selectPatient" column="select_patient_id" class="org.openmrs.module.casesummary.model.SelectPatient"
+                     lazy="false" foreign-key="fk_cs_slide_selectpatient_id" />
+       
+    </class>
+</hibernate-mapping>

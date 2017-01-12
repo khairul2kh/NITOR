@@ -36,6 +36,7 @@ import org.openmrs.module.casesummary.model.SelectPatient;
 import org.openmrs.module.casesummary.model.Slide;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.openmrs.module.casesummary.model.FollowUp;
 
 /**
  * It is a default implementation of {@link CaseSummaryDAO}.
@@ -111,6 +112,7 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(SelectPatient.class);
         criteria.add(Restrictions.eq("userId.userId", userId));
         criteria.add(Restrictions.eq("patientId.personId", patientId));
+        criteria.add(Restrictions.eq("status", false)); /// 
         return (SelectPatient) criteria.uniqueResult();
 
     }
@@ -193,6 +195,36 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Slide.class);
         criteria.add(Restrictions.eq("id", id));
         return (Slide) criteria.uniqueResult();
+    }
+
+    @Override
+    public FollowUp saveFollowUp(FollowUp followUp) throws DAOException {
+        sessionFactory.getCurrentSession().saveOrUpdate(followUp);
+        return followUp;
+    }
+
+    @Override
+    public FollowUp getFollUpLastId(int userId) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(FollowUp.class);
+        criteria.add(Restrictions.eq("creator", userId));
+        criteria.addOrder(Order.desc("id"));
+        criteria.setFirstResult(0);
+        criteria.setMaxResults(1);
+        return (FollowUp) criteria.uniqueResult();
+    }
+
+    @Override
+    public FollowUp getFollowUpById(int id) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(FollowUp.class);
+        criteria.add(Restrictions.eq("id", id));
+        return (FollowUp) criteria.uniqueResult();
+    }
+
+    @Override
+    public List<FollowUp> listFollUpBySelPatId(int id) throws DAOException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(FollowUp.class);
+        criteria.add(Restrictions.eq("selectPatient.id", id));
+        return criteria.list();
     }
 
 }

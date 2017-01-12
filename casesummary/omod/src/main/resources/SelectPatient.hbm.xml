@@ -24,6 +24,12 @@
         <property name="admittedBed" column="admitted_bed" /> 
         <property name="unit" column="unit" />
         <property name="createdDate" column="created_date" />
+        
+        <property name="admittedForm" column="admitted_form" />
+        <property name="contactNo" column="contact_no" />
+        <property name="dateOfAdmission" column="date_of_admission" />
+        <property name="imageName" column="image_name" />
+        
         <many-to-one name="userId" column="user_id" class="org.openmrs.User"
                      foreign-key="fk_cs_select_patient_user_id" />
         <property name="status" column="status" />

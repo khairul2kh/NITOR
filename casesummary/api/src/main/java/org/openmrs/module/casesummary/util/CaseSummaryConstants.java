@@ -14,6 +14,8 @@ public class CaseSummaryConstants {
     public static final String MODULE_ID = "casesummary";
 
     public static final String IPD_WARD_LIST = "IPD WARD";
+    public static final String UNIT_NAME_LIST = "UNIT NAME";
+    
     //public static String PROPERTY_PROVISIONAL_DIAGNOSIS = MODULE_ID + ".provisionalDiagnosisConcept";
 
 }

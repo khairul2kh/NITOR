@@ -5,36 +5,23 @@
  */
 package org.openmrs.module.casesummary.web.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.FollowUp;
 import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
@@ -43,14 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  *
@@ -78,7 +61,7 @@ public class CaseSummaryAjaxController {
             @RequestParam(value = "id", required = false) int id,
             @RequestParam(value = "sailentFeat", required = false) String sailentFeat,
             @RequestParam(value = "unit", required = false) String unit) {
-        User u = Context.getAuthenticatedUser();
+        // User u = Context.getAuthenticatedUser();
 
         SelectPatient sp = caseSumService.getSelPatientById(id);
         System.out.println("****************" + id);
@@ -109,7 +92,7 @@ public class CaseSummaryAjaxController {
             @RequestParam(value = "nameOfSur", required = false) String nameOfSur,
             @RequestParam(value = "typeAnest", required = false) String typeAnest,
             @RequestParam(value = "procDet", required = false) String procedureDetail) {
-        User u = Context.getAuthenticatedUser();
+        // User u = Context.getAuthenticatedUser();
         SelectPatient sp = caseSumService.getSelPatientById(id);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -139,7 +122,7 @@ public class CaseSummaryAjaxController {
 
     @RequestMapping(value = "/module/casesummary/otnoteajax.htm", method = RequestMethod.GET)
     public String selectedPatientSingle(@RequestParam("patientId") int patientId, ModelMap model) {
-       // User u = Context.getAuthenticatedUser();
+        User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
         int userId = u.getUserId();
         SelectPatient sp = caseSumService.getSelectPatiByPatientIdUsreId(userId, patientId);
@@ -175,20 +158,22 @@ public class CaseSummaryAjaxController {
             @RequestParam("imgInp1") MultipartFile multipartFile1,
             HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        
+
         Slide slide = caseSumService.getSlideLastId(u.getUserId());
-        
-        Calendar now = Calendar.getInstance();
-        String curYear = String.valueOf(now.get(Calendar.YEAR));
-        
-        String fullName=file_name.toString()+"-"+slide.getId()+"-"+curYear;
-        
+
+//        Calendar now = Calendar.getInstance();
+//        String curYear = String.valueOf(now.get(Calendar.YEAR));
+        DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
+        String curYear = df.format(Calendar.getInstance().getTime());
+
+        String fullName = file_name.toString() + "-" + "s" + slide.getId() + "-" + curYear;
+
         long fileSize = multipartFile.getSize();
         String fileName = multipartFile.getOriginalFilename();
         if ((multipartFile != null && multipartFile.getSize() > 0)) {
             if (saveFile(multipartFile, request)) {
-               
-                slide.setImgNameOne(fullName+"-"+fileName);
+
+                slide.setImgNameOne(fullName + "-" + fileName);
                 caseSumService.saveSlide(slide);
             }
         }
@@ -198,8 +183,8 @@ public class CaseSummaryAjaxController {
 
         if ((multipartFile1 != null && multipartFile1.getSize() > 0)) {
             if (saveFile(multipartFile1, request)) {
-                
-                slide.setImgNameTwo(fullName+"-"+fileName1);
+
+                slide.setImgNameTwo(fullName + "-" + fileName1);
                 caseSumService.saveSlide(slide);
             }
         }
@@ -213,21 +198,25 @@ public class CaseSummaryAjaxController {
         if (!pathFile.exists()) {
             pathFile.mkdir();
         }
-        Calendar now = Calendar.getInstance();
-        String curYear = String.valueOf(now.get(Calendar.YEAR));
+
+        // Calendar now = Calendar.getInstance();
+        //String curYear = String.valueOf(now.get(Calendar.YEAR));
+        DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
+        String curYear = df.format(Calendar.getInstance().getTime());
 
         Slide s = caseSumService.getSlideLastId(u.getUserId());
+        String sn = "s" + s.getId();
 
         pathFile = new File(pathFile
                 + File.separator
                 + file_name.toString()
                 + "-"
-                + s.getId()
+                + sn
                 + "-"
                 + curYear
                 + "-"
                 + fileName);
-         String st = Integer.toString(s.getId());
+        //   String st = Integer.toString(s.getId());
         //save the actual file
         try {
             multipartFile.transferTo(pathFile);
@@ -262,23 +251,28 @@ public class CaseSummaryAjaxController {
         User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
 
-        DoctorProfile dp = caseSumService.docProFindByUserId(u.getUserId());
-        model.addAttribute("dp", dp);
-
         SelectPatient sp = caseSumService.getSelPatientById(id);
         model.addAttribute("sp", sp);
         model.addAttribute("age", sp.getPatientId().getAge());
         model.addAttribute("sex", sp.getPatientId().getGender());
+
+        System.out.println("userId*********" + sp.getUserId().getId());
+
+        DoctorProfile dp = caseSumService.docProFindByUserId(sp.getUserId().getId());
+        model.addAttribute("dp", dp);
 
         SailentFeature sf = caseSumService.getSailentById(id);
         model.addAttribute("sf", sf);
 
         List<Slide> listSlide = caseSumService.listSlideBySelPatId(id);
         model.addAttribute("listSlide", listSlide);
-        
-        List<OtNote> otNote=caseSumService.listOtNote(id);
+
+        List<OtNote> otNote = caseSumService.listOtNote(id);
         model.addAttribute("listOtNote", otNote);
-        
+
+        List<FollowUp> listFollUp = caseSumService.listFollUpBySelPatId(id);
+        model.addAttribute("listFollUp", listFollUp);
+
         sp.setStatus(true);
         caseSumService.saveSlectPatient(sp);
 

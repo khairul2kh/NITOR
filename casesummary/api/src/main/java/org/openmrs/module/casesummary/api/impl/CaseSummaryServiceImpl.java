@@ -20,6 +20,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.api.db.CaseSummaryDAO;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.FollowUp;
 import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
@@ -131,6 +132,25 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
     public Slide getSlideById(int id) throws APIException {
         return dao.getSlideById(id);
     }
- 
+
+    @Override
+    public FollowUp saveFollowUp(FollowUp followUp) throws APIException {
+        return dao.saveFollowUp(followUp);
+    }
+
+    @Override
+    public FollowUp getFollUpLastId(int userId) throws APIException {
+        return dao.getFollUpLastId(userId);
+    }
+
+    @Override
+    public FollowUp getFollowUpById(int id) throws APIException {
+        return dao.getFollowUpById(id);
+    }
+
+    @Override
+    public List<FollowUp> listFollUpBySelPatId(int id) throws APIException {
+        return dao.listFollUpBySelPatId(id);
+    }
 
 }

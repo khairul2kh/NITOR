@@ -50,9 +50,9 @@
                 });
             }
 
-            function selectPatientSingle(patientId) {
+            function selectPatientSingle(patientId, id) {
                 // alert(patientId);
-                window.location.href = openmrsContextPath + "/module/casesummary/selectedPatientSingle.htm?patientId=" + patientId;
+                window.location.href = openmrsContextPath + "/module/casesummary/selectedPatientSingle.htm?patientId=" + patientId + "&id=" + id;
             }
             ;
             function mainPage() {
@@ -136,12 +136,12 @@
                                     </c:forEach>
                                     <tr >
                                         <td> ${index.count}</td>
-                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.patientId.patientIdentifier.identifier}</td>
-                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.patientId.givenName} ${sp.patientId.middleName} ${sp.patientId.familyName}</td>
-                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${age} </td>
-                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.patientId.gender} </td>
-                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.admittedWard} </td>
-                                        <td onclick="selectPatientSingle(${sp.patientId.personId});"> ${sp.admittedBed} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${sp.patientId.patientIdentifier.identifier}</td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${sp.patientId.givenName} ${sp.patientId.middleName} ${sp.patientId.familyName}</td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${age} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${sp.patientId.gender} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${sp.admittedWard} </td>
+                                        <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${sp.admittedBed} </td>
                                         <td> 
                                             <button class="btn btn-success btn-sm slide" data-toggle="modal" data-backdrop="static" data-keyboard="false"
                                                     data-id="${sp.patientId.personId}" >Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>

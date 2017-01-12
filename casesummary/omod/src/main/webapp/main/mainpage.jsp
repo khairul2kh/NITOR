@@ -5,7 +5,7 @@
 --%>
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/headerMinimal.jsp"%>
-<%@ include file="../includes/js_css.jsp"%> 
+<%@ include file="../includes/js_css.jsp"%>
 
 <html>
     <head>  
@@ -51,12 +51,15 @@
             if (SESSION.checkSession()) {
                 $(document).ready(function() {
                     jQuery('#pdate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
+                    //jQuery('#reDate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
+                    jQuery('#reDate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true, minDate: '0'});
+
                     jQuery("#pdate").keyup(function(event) {
                         if (event.keyCode == 13) {
                             getSelectPatient();
                         }
                     });
-                    
+
                     getSelectPatient();
 
                     $('#myForm').formValidation({
@@ -136,7 +139,6 @@
                     alert("Please Select Presentation Date !!");
                     $("#pdate").focus();
                     return false;
-
                 }
                 jQuery.ajax({
                     type: "GET",
@@ -151,6 +153,27 @@
             }
             ;
 
+            function reschedulePresentation() {
+                var reDate = jQuery("#reDate").val();
+                var id = jQuery("#patientId1").val();
+                jQuery.ajax({
+                    type: "POST",
+                    url: getContextPath() + "/module/casesummary/reschedulePresentation.htm",
+                    data: ({
+                        id: id,
+                        reDate: reDate
+                    }),
+                    success: function(data) {
+                        alert("Reschedule Completed!!!");
+                        window.location = "main.form";
+                    },
+                    error: function() {
+
+                    }
+                });
+            }
+            ;
+
             function selectPatient(patientId) {
                 // alert(patientId);
                 window.location.href = openmrsContextPath + "/module/casesummary/selectPatient.htm?patientId=" + patientId;
@@ -160,6 +183,14 @@
             function goPresentation(id) {
                 // alert(patientId);
                 window.location.href = openmrsContextPath + "/module/casesummary/selectPatientSlide.htm?id=" + id;
+            }
+            ;
+
+            function modalClick(patientId) { // Click to only happen on announce links
+                $("#patientId1").val(patientId);
+                // $("#patientId1").val($(this).data(patientId));
+                $('#slideForm').modal({backdrop: 'static', keyboard: false});
+                $('#slideForm').modal('show');
             }
             ;
 
@@ -273,7 +304,7 @@
 
                     </div>
                     <div id="presenterList" style="padding:4px;"></div> 
-
+                    <div id="reschedulePres" style="padding:4px;"></div>
                 </div>
             </div>
 
@@ -440,10 +471,23 @@
         </div>
         <!-- Modal Doctor Profile End -->
 
-        <div class="modal fade" id="loadPage" role="dialog" >
-            <div class="modal-dialog">
+        <div class="modal fade" id="slideForm" role="dialog">
+            <div class="modal-dialog modal-sm">
                 <div class="modal-content">
-                    <img src="${pageContext.request.contextPath}/moduleResources/casesummary/loader.gif" id="loading-indicator" style="display: " />
+                    <form class="form-horizontal">
+                        <div class="modal-body">
+                            <input id="patientId1" name="patientId1" type="hidden" id="patientId1" />
+                            <input type="text" class="date-pick" id="reDate" placeholder="Presentation Date" />
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button onclick="reschedulePresentation()"  class="btn btn-primary" data-dismiss="modal" ng-disabled="myForm.$invalid">
+                                <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

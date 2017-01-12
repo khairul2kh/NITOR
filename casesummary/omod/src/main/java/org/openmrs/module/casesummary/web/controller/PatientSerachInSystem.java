@@ -5,12 +5,15 @@
  */
 package org.openmrs.module.casesummary.web.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -29,6 +32,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -50,6 +55,9 @@ public class PatientSerachInSystem {
 
     @Autowired
     CaseSummaryService caseSumService;
+
+    public static Integer getPatientId = 0;
+    User u = Context.getAuthenticatedUser();
 
     @RequestMapping(value = "/module/casesummary/patientSerach.htm", method = RequestMethod.GET)
     public String serachPatient(@RequestParam(value = "searchKey", required = false) String searchKey,
@@ -69,15 +77,28 @@ public class PatientSerachInSystem {
 
         PatientSearchCs ps = caseSumService.getPatientSerByPatientId(patientId);
         model.addAttribute("ps", ps);
+        
+        SelectPatient sp=null;
+        sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getId(), patientId);
+        
+        if(sp==null){
+            model.addAttribute("check","true");
+        }
+        else {
+            model.addAttribute("check","false");
+        }
 
         Concept ipdList = Context.getConceptService().getConceptByName(CaseSummaryConstants.IPD_WARD_LIST);
         model.addAttribute("ipdList", ipdList.getAnswers());
+
+        Concept unitList = Context.getConceptService().getConceptByName(CaseSummaryConstants.UNIT_NAME_LIST);
+        model.addAttribute("unitList", unitList.getAnswers());
 
         return "module/casesummary/patientSearch/selectPatient";
     }
 
     @RequestMapping(value = "/module/casesummary/selectPatientSave.htm", method = RequestMethod.POST)
-    public String selectPatientSave(@ModelAttribute("selectPatient") SelectPatient selectPatient, BindingResult result,
+    public String selectPatientSave(//@ModelAttribute("selectPatient") SelectPatient selectPatient, BindingResult result,
             @RequestParam(value = "patientId", required = false) int patientId,
             @RequestParam(value = "address", required = false) String address,
             @RequestParam(value = "fatherName", required = false) String fatherName,
@@ -87,20 +108,27 @@ public class PatientSerachInSystem {
             @RequestParam(value = "pdate", required = false) String pdate,
             @RequestParam(value = "award", required = false) String award,
             @RequestParam(value = "abed", required = false) String abed,
-            @RequestParam(value = "unit", required = false) String unit) {
-        User u = Context.getAuthenticatedUser();
-        System.out.println("*************888" + patientId);
+            @RequestParam(value = "contactNo", required = false) String contactNo,
+            @RequestParam(value = "adForm", required = false) String adForm,
+            @RequestParam(value = "adDate", required = false) String adDate,
+            @RequestParam(value = "unit", required = false) String unit, Model model) {
+
+        //System.out.println("*************patientid=" + patientId);
         Patient patient = Context.getPatientService().getPatient(patientId);
+
+        getPatientId = patientId;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date preDate = null;
+        Date admissionDate = null;
 
         try {
             preDate = sdf.parse(pdate);
+            admissionDate = sdf.parse(adDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        SelectPatient selectPatient = new SelectPatient();
         selectPatient.setPatientId(patient);
         selectPatient.setAddress(address);
         selectPatient.setFatherName(fatherName);
@@ -111,20 +139,81 @@ public class PatientSerachInSystem {
         selectPatient.setAdmittedWard(award);
         selectPatient.setAdmittedBed(abed);
         selectPatient.setUnit(unit);
+        selectPatient.setAdmittedForm(adForm);
+        selectPatient.setContactNo(contactNo);
+        selectPatient.setDateOfAdmission(admissionDate);
 
         selectPatient.setCreatedDate(new Date());
         selectPatient.setUserId(u);
-        caseSumService.saveSlectPatient(selectPatient);
+        selectPatient = caseSumService.saveSlectPatient(selectPatient);
 
+        System.out.println("****************" + selectPatient.getId());
+        model.addAttribute("id", selectPatient.getId());
         return "redirect:/module/casesummary/main.form";
+        // return "redirect:/module/casesummary/selectedPatientSingle.htm?patientId=" + patientId +"&id="+selectPatient.getId();
+        //selectedPatientSingle.htm?patientId=" + patientId;
+    }
+
+    @RequestMapping(value = "/module/casesummary/pictureSavePatFile.htm", method = RequestMethod.POST)
+    public void savePatientFile(@RequestParam("patImage") MultipartFile multipartFile,
+            //  @RequestParam(value = "patientId", required = false) int patientId,
+            HttpServletRequest request, HttpServletResponse response,
+            Model model) {
+
+        System.out.println("*****************" + getPatientId);
+
+        SelectPatient sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getUserId(), getPatientId);
+        String fullName = sp.getId() + "-" + getPatientId + "pId";
+
+        String fileName = multipartFile.getOriginalFilename();
+        System.out.println("******" + fileName);
+        if ((multipartFile != null && multipartFile.getSize() > 0)) {
+            if (saveFilePatient(multipartFile, request)) {
+                sp.setImageName(fullName + "-" + fileName);
+                caseSumService.saveSlectPatient(sp);
+            }
+        }
+    }
+
+    public boolean saveFilePatient(MultipartFile multipartFile, HttpServletRequest request) {
+        String fileLocation = request.getSession().getServletContext().getRealPath("/imageFolder/");
+        boolean result = false;
+        String fileName = multipartFile.getOriginalFilename();
+        File pathFile = new File(fileLocation);
+        if (!pathFile.exists()) {
+            pathFile.mkdir();
+        }
+        SelectPatient sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getUserId(), getPatientId);
+        pathFile = new File(pathFile
+                + File.separator
+                + sp.getId()
+                + "-"
+                + getPatientId
+                + "pId"
+                + "-"
+                + fileName);
+        try {
+            multipartFile.transferTo(pathFile);
+            result = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @RequestMapping(value = "/module/casesummary/selectedPatientSingle.htm", method = RequestMethod.GET)
-    public String selectedPatientSingle(@RequestParam("patientId") int patientId, ModelMap model) {
-        User u = Context.getAuthenticatedUser();
+    public String selectedPatientSingle(@RequestParam("patientId") int patientId,
+            @RequestParam(value = "id", required = false) int id,
+            ModelMap model) {
+        //User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
-        int userId = u.getUserId();
-        SelectPatient sp = caseSumService.getSelectPatiByPatientIdUsreId(userId, patientId);
+        SelectPatient sp = null;
+        if (id == 0) {
+            sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getId(), patientId);
+        } else {
+            sp = caseSumService.getSelPatientById(id);
+        }
+
         model.addAttribute("sp", sp);
         model.addAttribute("age", sp.getPatientId().getAge());
         SailentFeature sf = caseSumService.getSailentById(sp.getId());
@@ -136,7 +225,7 @@ public class PatientSerachInSystem {
 
     @RequestMapping(value = "/module/casesummary/selectedPatientList.htm", method = RequestMethod.GET)
     public String selectedPatientList(ModelMap model) {
-        User u = Context.getAuthenticatedUser();
+        //User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
         int userId = u.getUserId();
 

@@ -45,6 +45,43 @@ public class SelectPatient implements Serializable {
     private Date createdDate;
     private User userId;
     private boolean status;
+    private String admittedForm;
+    private String contactNo;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateOfAdmission;
+    private String imageName;
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getAdmittedForm() {
+        return admittedForm;
+    }
+
+    public void setAdmittedForm(String admittedForm) {
+        this.admittedForm = admittedForm;
+    }
+
+    public String getContactNo() {
+        return contactNo;
+    }
+
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
+    }
+
+    public Date getDateOfAdmission() {
+        return dateOfAdmission;
+    }
+
+    public void setDateOfAdmission(Date dateOfAdmission) {
+        this.dateOfAdmission = dateOfAdmission;
+    }
 
     public boolean getStatus() {
         return status;

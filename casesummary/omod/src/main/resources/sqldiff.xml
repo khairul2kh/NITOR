@@ -153,5 +153,57 @@
         </sql>
     </diff>
     
+    <diff>
+        <version>1.0.9</version>
+        <author>Md. Khaiurl Islam</author>
+        <date>07 Jan 2017</date>
+        <description>Follow up Table</description>
+        <sql>
+            CREATE TABLE IF NOT EXISTS `cs_follow_up` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `select_patient_id` INT(11) DEFAULT NULL,
+            `diagnosis` VARCHAR(200) DEFAULT NULL,
+            `date_of_surg` DATE DEFAULT NULL,
+            `date_of_foll` DATE DEFAULT NULL,
+            `comment` VARCHAR(500) DEFAULT NULL,
+            `subse_plan` VARCHAR(500) DEFAULT NULL, 
+            `created_date` DATETIME DEFAULT NULL,
+            `creator` INT(11) DEFAULT NULL,
+            `image_name_one` VARCHAR(200) DEFAULT NULL,
+            `image_name_two` VARCHAR(200) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `fk_cs_follow_up_selectpatient_id` (`select_patient_id`),
+            CONSTRAINT `fk_cs_follow_up_selectpatient_id` FOREIGN KEY (`select_patient_id`) REFERENCES `cs_select_patient` (`id`)
+            ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+        </sql>
+    </diff>
+    
+    <diff>
+        <version>2.0.1</version>
+        <author>Md. Khairul Islam</author>
+        <date>08 Jan 2017</date>
+        <description>
+            Add column  cs_select_patient table new requirements for admitted_from, contact_no, date_of_admission
+        </description>
+        <sql>
+            ALTER TABLE `cs_select_patient`
+            ADD(`admitted_form` VARCHAR(50) DEFAULT NULL, 
+            contact_no VARCHAR(50) DEFAULT NULL,
+            date_of_admission DATE DEFAULT NULL);
+        </sql>
+    </diff>
+    
+    <diff>
+        <version>2.0.2</version>
+        <author>Md. Khairul Islam</author>
+        <date>10 Jan 2017</date>
+        <description>
+            Add column  cs_select_patient table new requirements for image_name
+        </description>
+        <sql>
+            ALTER TABLE `cs_select_patient`
+            ADD(`image_name` VARCHAR(200) DEFAULT NULL);
+        </sql>
+    </diff>
      
 </sqldiff>

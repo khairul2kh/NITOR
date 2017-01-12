@@ -16,11 +16,13 @@ import java.util.List;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.FollowUp;
 import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
 import org.openmrs.module.casesummary.model.Slide;
+
 
 public interface CaseSummaryDAO {
 
@@ -57,5 +59,13 @@ public interface CaseSummaryDAO {
     public Slide getSlideLastId(int userId)throws DAOException;
     
     public Slide getSlideById(int id)throws DAOException;
+    
+    public FollowUp saveFollowUp(FollowUp followUp) throws DAOException;
+
+    public FollowUp getFollUpLastId(int userId) throws DAOException;
+
+    public FollowUp getFollowUpById(int id) throws DAOException;
+
+    public List<FollowUp> listFollUpBySelPatId(int id) throws DAOException;
     
 }

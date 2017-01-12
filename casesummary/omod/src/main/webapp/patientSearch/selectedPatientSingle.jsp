@@ -46,6 +46,8 @@
             if (SESSION.checkSession()) {
                 $(document).ready(function() {
                     jQuery('#otDate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
+                    jQuery('#dateSurgery').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
+                    jQuery('#dateFollup').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
 
                     $(".sailentfet").click(function() { // Click to only happen on announce links
                         $("#patientId").val($(this).data('id'));
@@ -103,8 +105,8 @@
                             reader.onload = function(e) {
                                 $('#follView')
                                         .attr('src', e.target.result)
-                                        .width(100)
-                                        .height(100);
+                                        .width(120)
+                                        .height(120);
                             }
                             reader.readAsDataURL(input.files[0]);
                         }
@@ -116,8 +118,8 @@
                             reader.onload = function(e) {
                                 $('#follView1')
                                         .attr('src', e.target.result)
-                                        .width(100)
-                                        .height(100);
+                                        .width(120)
+                                        .height(120);
                             }
                             reader.readAsDataURL(input.files[0]);
                         }
@@ -192,6 +194,7 @@
                     },
                     success: function() {
                         alert("Successfully Added Ot Note!");
+                        getResult(patientId);
                         //window.location = "selectedPatientSingle.htm?patientId="+patientId;
                     },
                     error: function() {
@@ -204,6 +207,24 @@
                         $("#typeAnest").val("");
                         getResult(patientId);
 
+                    }
+                });
+            }
+            ;
+
+            function getResult(patientId) {
+                jQuery("#defaultResult").hide();
+                jQuery.ajax({
+                    type: "GET",
+                    url: getContextPath() + "/module/casesummary/otnoteajax.htm",
+                    data: ({
+                        patientId: patientId
+                    }),
+                    success: function(data) {
+                        jQuery("#viewResult").html(data);
+                    },
+                    error: function(data) {
+                        jQuery("#viewResult").html(data);
                     }
                 });
             }
@@ -263,20 +284,66 @@
                 });
             }
 
-            function getResult(patientId) {
-                jQuery("#defaultResult").hide();
-                jQuery.ajax({
-                    type: "GET",
-                    url: getContextPath() + "/module/casesummary/otnoteajax.htm",
-                    data: ({
-                        patientId: patientId
-                    }),
-                    success: function(data) {
-                        jQuery("#viewResult").html(data);
+            function saveFollowUp(id) {
+                var diagnosisFoll = $("#diagnosisFoll").val();
+                var dateSurgery = $("#dateSurgery").val();
+                var dateFollup = $("#dateFollup").val();
+                var comment = $("#comment").val();
+                var subPlan = $("#subPlan").val();
+
+                if (diagnosisFoll == "" || diagnosisFoll == null) {
+                    alert("Diagnosis empty not allowed!!!");
+                    $("#diagnosisFoll").focus();
+                    return false;
+                }
+                $.ajax({
+                    url: getContextPath() + "/module/casesummary/followUpSave.htm",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        id: id,
+                        diagnosisFoll: diagnosisFoll,
+                        dateSurgery: dateSurgery,
+                        dateFollup: dateFollup,
+                        comment: comment,
+                        subPlan: subPlan
                     },
+                    success: function() {
+                        alert("Successfully Added Slide !!!");
+                    },
+                    error: function() {
+                        alert("Successfully Added Slide !!!");
+                        $("#diagnosisFoll").val("");
+                        $("#dateSurgery").val("");
+                        $("#dateFollup").val("");
+                        $("#comment").val("");
+                        $("#subPlan").val("");
+                        savePicturesFollUp();
+                    }
                 });
             }
             ;
+
+            function savePicturesFollUp() {
+                $.ajax({
+                    url: 'pictureSaveFollUP.htm',
+                    type: "POST",
+                    data: new FormData(document.getElementById("picFormFollUp")),
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false
+                }).done(function(data) {
+                    location.reload();
+                    jQuery('#follUpImg1').val("");
+                    jQuery('#follUpImg2').val("");
+                }).fail(function(jqXHR, textStatus) {
+                    //alert(jqXHR.responseText);
+                    //  alert('File upload failed ...');
+                    location.reload();
+                    jQuery('#follUpImg1').val("");
+                    jQuery('#follUpImg2').val("");
+                });
+            }
         </script>
     </head>
 
@@ -426,25 +493,26 @@
 
                             <div class="tab-pane" id="3" style="background-color:;"> <!-- ot note -->
                                 <form name="otForm" id="otForm" class="form-horizontal">
+                                    <input type="hidden" id="patientId" value="${sp.patientId.personId}" />
                                     <br>
                                     <div class="row">
                                         <div class="col-sm-6"> <!-- first column -->
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4 left"  >Date :</label>
                                                 <div class="col-sm-5">
-                                                    <input type="text" class="form-control input-sm" name="otDate" id="otDate" required ng-minlength="3"/>
+                                                    <input type="text" class="form-control input-sm" name="otDate" id="otDate" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4"  >Time :</label>
                                                 <div class="col-sm-5">
-                                                    <input type="text" class="form-control input-sm" name="otTime" id="otTime" required ng-minlength="3"/>
+                                                    <input type="text" class="form-control input-sm" name="otTime" id="otTime" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label col-sm-4 left"  >Name of OT :</label>
                                                 <div class="col-sm-7">
-                                                    <input type="text" class="form-control input-sm" name="nameOfOt" id="nameOfOt" required ng-minlength="3"/>
+                                                    <input type="text" class="form-control input-sm" name="nameOfOt" id="nameOfOt" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -466,7 +534,7 @@
                                             <textarea class="form-control" rows="8" name="procedureDetail" id="procedureDetail" placeholder="Add Salient Feature" required > </textarea>
                                         </div>
                                     </div>
-                                    <input type="hidden" id="patientId" value="${sp.patientId.personId}" />
+
                                     <div class="form-group">
                                         <div class="col-sm-10">
                                             <button onclick="saveOtNote('${sp.id}')"  class="btn btn-primary" >
@@ -535,7 +603,7 @@
 
                                             <div>
                                                 Comment :
-                                                <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Comment"></textarea>
+                                                <textarea class="form-control" id="comment" name="comment" rows="2" placeholder="Comment"></textarea>
                                             </div>
                                             <br>
                                             <div>
@@ -545,9 +613,10 @@
                                         </form>
                                     </div>
 
+
                                     <div class="col-sm-6 col-md-6">
                                         <div class="thumbnail">
-                                            <form action="pictureSave.htm" class="form-horizontal" id="picForm" name="picForm" method="post" enctype="multipart/form-data">  
+                                            <form action="pictureSaveFollUP.htm" class="form-horizontal" id="picFormFollUp" name="picFormFollUp" method="post" enctype="multipart/form-data">  
 
                                                 <div class="form-group">  <!-- Image one -->
                                                     <label class="control-label col-sm-4 left"  >  
@@ -570,10 +639,11 @@
                                                 </div>
                                             </form>  
                                         </div>
-                                        <button onclick="saveSlide('${sp.id}')"  class="btn btn-primary" >
+                                        <button onclick="saveFollowUp('${sp.id}')"  class="btn btn-primary" >
                                             <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
                                         </button>
                                     </div>
+
                                 </div>
                             </div>
 

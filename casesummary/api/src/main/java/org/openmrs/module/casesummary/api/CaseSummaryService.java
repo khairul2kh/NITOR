@@ -16,6 +16,7 @@ import java.util.List;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.FollowUp;
 import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
@@ -31,34 +32,41 @@ public interface CaseSummaryService extends OpenmrsService {
     public DoctorProfile docProFindByUserId(int userId) throws APIException;
 
     public List<PatientSearchCs> patientSearchByIdName(String searchKey) throws APIException;
-    
-    public PatientSearchCs getPatientSerByPatientId(int id)throws APIException;
-    
-    public SelectPatient saveSlectPatient(SelectPatient selectPatient)throws APIException;
-    
-    public List<SelectPatient> listSelectPatientByUser(int userId)throws APIException;
-    
-    public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId)throws APIException;
-    
-    public SailentFeature saveSailentFeat(SailentFeature sailentFeature)throws APIException;
-    
-    public SelectPatient getSelPatientById(int id)throws APIException;
-    
-    public SailentFeature getSailentById(int id)throws APIException;
-    
-    public OtNote saveOtNote(OtNote otNote)throws APIException;
-    
-    public List<OtNote> listOtNote(int id)throws APIException;
-    
-    public Slide saveSlide(Slide slide)throws APIException;
-    
-    public List<SelectPatient> listSelPatientByDate(Date date)throws APIException;
-    
-    public List<Slide> listSlideBySelPatId(int id)throws APIException;
-    
-    public Slide getSlideLastId(int userId)throws APIException;
-    
-    public Slide getSlideById(int id)throws APIException;
-    
-            
+
+    public PatientSearchCs getPatientSerByPatientId(int id) throws APIException;
+
+    public SelectPatient saveSlectPatient(SelectPatient selectPatient) throws APIException;
+
+    public List<SelectPatient> listSelectPatientByUser(int userId) throws APIException;
+
+    public SelectPatient getSelectPatiByPatientIdUsreId(int userId, int patientId) throws APIException;
+
+    public SailentFeature saveSailentFeat(SailentFeature sailentFeature) throws APIException;
+
+    public SelectPatient getSelPatientById(int id) throws APIException;
+
+    public SailentFeature getSailentById(int id) throws APIException;
+
+    public OtNote saveOtNote(OtNote otNote) throws APIException;
+
+    public List<OtNote> listOtNote(int id) throws APIException;
+
+    public Slide saveSlide(Slide slide) throws APIException;
+
+    public List<SelectPatient> listSelPatientByDate(Date date) throws APIException;
+
+    public List<Slide> listSlideBySelPatId(int id) throws APIException;
+
+    public Slide getSlideLastId(int userId) throws APIException;
+
+    public Slide getSlideById(int id) throws APIException;
+
+    public FollowUp saveFollowUp(FollowUp followUp) throws APIException;
+
+    public FollowUp getFollUpLastId(int userId) throws APIException;
+
+    public FollowUp getFollowUpById(int id) throws APIException;
+
+    public List<FollowUp> listFollUpBySelPatId(int id) throws APIException;
+
 }
