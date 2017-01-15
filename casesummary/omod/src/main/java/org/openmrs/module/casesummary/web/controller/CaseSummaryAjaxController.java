@@ -47,8 +47,6 @@ public class CaseSummaryAjaxController {
     private static final long serialVersionUID = 1L;
     public static final String SAVE_LOCATION = "C:/ImagesFolder/";
 
-    User u = Context.getAuthenticatedUser();
-
     //   public static final String SAVE_LOCATION = "/root/ImagesFolder/";
     public static Integer file_name = 0;
     public static Integer slide_id = 0;
@@ -61,7 +59,7 @@ public class CaseSummaryAjaxController {
             @RequestParam(value = "id", required = false) int id,
             @RequestParam(value = "sailentFeat", required = false) String sailentFeat,
             @RequestParam(value = "unit", required = false) String unit) {
-        // User u = Context.getAuthenticatedUser();
+        User u = Context.getAuthenticatedUser();
 
         SelectPatient sp = caseSumService.getSelPatientById(id);
         System.out.println("****************" + id);
@@ -92,7 +90,7 @@ public class CaseSummaryAjaxController {
             @RequestParam(value = "nameOfSur", required = false) String nameOfSur,
             @RequestParam(value = "typeAnest", required = false) String typeAnest,
             @RequestParam(value = "procDet", required = false) String procedureDetail) {
-        // User u = Context.getAuthenticatedUser();
+        User u = Context.getAuthenticatedUser();
         SelectPatient sp = caseSumService.getSelPatientById(id);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -131,14 +129,14 @@ public class CaseSummaryAjaxController {
         model.addAttribute("listOtNote", listOtNote);
         return "module/casesummary/ajax/otnoteresult";
     }
-
+    
     @RequestMapping(value = "/module/casesummary/slideSave.htm", method = RequestMethod.POST)
     public void slideSave(
             @RequestParam(value = "id", required = false) int id,
             @RequestParam(value = "diagnosis", required = false) String diagnosis,
             @RequestParam(value = "plan", required = false) String plan,
             Model model) throws IOException {
-
+        User u = Context.getAuthenticatedUser();
         SelectPatient sp = caseSumService.getSelPatientById(id);
         Slide s = new Slide();
         s.setSelectPatient(sp);
@@ -158,7 +156,7 @@ public class CaseSummaryAjaxController {
             @RequestParam("imgInp1") MultipartFile multipartFile1,
             HttpServletRequest request, HttpServletResponse response,
             Model model) {
-
+        User u = Context.getAuthenticatedUser();
         Slide slide = caseSumService.getSlideLastId(u.getUserId());
 
 //        Calendar now = Calendar.getInstance();
@@ -198,7 +196,7 @@ public class CaseSummaryAjaxController {
         if (!pathFile.exists()) {
             pathFile.mkdir();
         }
-
+        User u = Context.getAuthenticatedUser();
         // Calendar now = Calendar.getInstance();
         //String curYear = String.valueOf(now.get(Calendar.YEAR));
         DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
@@ -279,4 +277,5 @@ public class CaseSummaryAjaxController {
         return "module/casesummary/presentation/readyPresentation";
     }
 
+     
 }

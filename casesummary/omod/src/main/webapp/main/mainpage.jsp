@@ -186,6 +186,12 @@
             }
             ;
 
+            function createPatient() {
+                // alert(patientId);
+                window.location.href = openmrsContextPath + "/findPatient.htm?d="+1;
+            }
+            ;
+
             function modalClick(patientId) { // Click to only happen on announce links
                 $("#patientId1").val(patientId);
                 // $("#patientId1").val($(this).data(patientId));
@@ -247,8 +253,6 @@
         <br><br><br>
         <!-- Main Body Start Here -->
         <div class="container theme-showcase" role="main" ng-controller="UserController">
-
-
 
             <div class="panel panel-success" ng-hide = "IsVisible">
                 <div class="panel-heading">Selected Patient List </div>
@@ -334,7 +338,20 @@
                                     <span class="error" ng-show="searchForm.searchKey.$error.minlength">
                                         Too short!</span>
                                 </div>
-                            </div>							 
+                            </div>
+
+                            <div class="col-lg-1"></div>
+
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="inputGroup"> Add Patient Manually </label>
+                                    <div class="input-group">
+                                        <input type="button" class="btn btn-info" value="Add Patient" 
+                                               onclick="createPatient()" id="patManually" name="patManually"  />  
+                                    </div>
+                                </div>								
+                            </div>
+
                         </div><!-- /.row -->
                         <div id="patientqueue" style="padding:4px;"></div> 
                         <button ng-click="ShowHide()" class="btn btn-danger pull-right">Close &nbsp; <i class="glyphicon glyphicon-remove"> </i></button>

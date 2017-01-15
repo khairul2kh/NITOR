@@ -163,18 +163,18 @@ public class CaseSummayAjaxControllerTwo {
 
     @RequestMapping(value = "/module/casesummary/reschedulePresentation.htm", method = RequestMethod.POST)
     public String updateReschedule(@RequestParam(value = "id", required = false) int id,
-            @RequestParam(value="reDate",required =false ) String reDate, ModelMap model) {
-        
+            @RequestParam(value = "reDate", required = false) String reDate, ModelMap model) {
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date reschedule = null;
 
         try {
             reschedule = sdf.parse(reDate);
-            
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        
+
         SelectPatient sp = caseSumService.getSelPatientById(id);
         sp.setPresentationDate(reschedule);
         sp.setStatus(false);
@@ -183,4 +183,5 @@ public class CaseSummayAjaxControllerTwo {
 
         return "module/casesummary/thickbox/success_1";
     }
+
 }

@@ -35,6 +35,11 @@
         <name>Access Case Summary</name>
         <description>Allows user to Access Case Summary Module</description>
     </privilege>
+    
+    <privilege>
+        <name>Create Patient For Visit</name>
+        <description>Allows user to Access Create Patient</description>
+    </privilege>
 	
     <!-- Maps hibernate file's, if present -->
     <mappingFiles>

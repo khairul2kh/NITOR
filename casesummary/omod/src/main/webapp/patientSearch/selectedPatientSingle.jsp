@@ -56,7 +56,8 @@
                     });
 
                     $(".slide").click(function() { // Click to only happen on announce links
-                        $("#patientId1").val($(this).data('id'));
+                        $("#slideId").val($(this).data('id'));
+                        forEdit($(this).data('id'));
                         $('#slideForm').modal({backdrop: 'static', keyboard: false});
                         $('#slideForm').modal('show');
                     });
@@ -251,6 +252,7 @@
                     },
                     success: function() {
                         alert("Successfully Added Slide !!!");
+                        savePictures();
                     },
                     error: function() {
                         alert("Successfully Added Slide !!!");
@@ -342,6 +344,80 @@
                     location.reload();
                     jQuery('#follUpImg1').val("");
                     jQuery('#follUpImg2').val("");
+                });
+            }
+
+            function forEdit(sId) {
+                jQuery.ajax({
+                    type: "GET",
+                    url: getContextPath() + "/module/casesummary/getSlideEdit.htm",
+                    data: ({
+                        sId: sId
+                    }),
+                    success: function(data) {
+                        jQuery("#slideEditDiv").html(data);
+                    },
+                    error: function(data) {
+                    }
+                });
+            }
+            ;
+
+            function updateSlide(sId) {
+
+                var upDiagnosis = document.getElementById("editFormSlide").elements[1].value;
+                var upPlan = document.getElementById("editFormSlide").elements[2].value;
+
+                if (upDiagnosis == "" || upDiagnosis == null) {
+                    alert("Diagnosis empty not allowed!!!");
+                    $("#upDiagnosis").focus();
+                    return false;
+                }
+
+                $.ajax({
+                    url: getContextPath() + "/module/casesummary/getSlideUpdate.htm",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        sId: sId,
+                        upDiagnosis: upDiagnosis,
+                        upPlan: upPlan
+                    },
+                    success: function() {
+                        alert("Successfully Update Slide !!!");
+                        location.reload();
+                    },
+                    error: function() {
+                        alert("Successfully Update Slide !!!");
+
+                        location.reload();
+                        //  $("#diagnosis").val("");
+                        //$("#plan").val("");
+                        updatePictures();
+
+                    }
+                });
+            }
+            ;
+
+            function updatePictures() {
+                $.ajax({
+                    url: 'pictureUpdate.htm',
+                    type: "POST",
+                    data: new FormData(document.getElementById("picFormUpdate")),
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false
+                }).done(function(data) {
+                    location.reload();
+                    jQuery('#imgInpEdit1').val("");
+                    jQuery('#imgInpEdit2').val("");
+                }).fail(function(jqXHR, textStatus) {
+                    //alert(jqXHR.responseText);
+                    //  alert('File upload failed ...');
+                    location.reload();
+                    jQuery('#imgInpEdit1').val("");
+                    jQuery('#imgInpEdit2').val("");
                 });
             }
         </script>
@@ -485,11 +561,85 @@
                                             </form>  
                                         </div>
                                         <button onclick="saveSlide('${sp.id}')"  class="btn btn-primary" >
-                                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                                            <span class="glyphicon glyphicon-save slide"></span>&nbsp;<span>Save</span>
                                         </button>
+
+                                    </div>
+                                </div>
+
+                                <div class="panel-body" id="defaultResult"> 
+                                    <c:if test="${ not empty listSlide}">
+                                        Slide List :
+                                        <table class="table table-bordered" style="font-size:12px;">
+                                            <tr>
+                                                <td >#</td>
+                                                <td >Diagnosis</td>
+                                                <td >Plan</td>
+                                                <td >Picture one</td>
+                                                <td >Picture two</td>
+                                                <td >Action</td>
+                                            </tr>
+                                            <tbody>
+                                                <c:forEach items="${listSlide}" var="slide" varStatus="index" >
+                                                    <tr>
+                                                        <td style="display:none;">${slide.id} </td>
+                                                        <td width="10%">${index.count}</td>
+                                                        <td width="30%"> ${slide.diagnosis}</td>
+                                                        <td width="30%"> ${slide.plan}</td>
+                                                        <td width="20%"> 
+                                                            <c:if test="${not empty slide.imgNameOne}">
+                                                                <img class="example-image1" src="${pageContext.request.contextPath}/imageFolder/${slide.imgNameOne}" 
+                                                                     alt="image-1" width="70px;" height="70px;" />  
+                                                            </c:if>
+                                                        </td>
+                                                        <td width="20%"> 
+                                                            <c:if test="${not empty slide.imgNameTwo}">
+                                                                <img class="example-image1" src="${pageContext.request.contextPath}/imageFolder/${slide.imgNameTwo}" 
+                                                                     alt="image-1" width="70px;" height="70px;" /> 
+                                                            </c:if>
+                                                        </td>
+                                                        <td> 
+                                                            <button class="btn btn-success btn-sm slide" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+                                                                    data-id="${slide.id}" >Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                        </td>
+                                                    </tr>
+
+                                                </c:forEach>
+                                            </tbody>
+                                        </table> 
+                                    </c:if> 
+                                </div>
+
+                                <!-- Edit Slide modal -->
+                                <div class="modal fade" id="slideForm" role="dialog" >
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h2 class="modal-title">Edit Slide</h2>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form name="myForm" id="myForm" class="form-horizontal">
+                                                    <input type="hidden" value="" id="slideId" />
+                                                    <div class="form-group" id="slideEditDiv"> </div>
+
+                                                    <div class="modal-footer">
+                                                        <div class="col-sm-8 left ">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                                                                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+                                                            </button>
+                                                            <input type="hidden" value="${s.id}" id="sId" name="sId" />
+
+
+                                                        </div>
+                                                    </div> 
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!--End modal edit slide -->
 
                             <div class="tab-pane" id="3" style="background-color:;"> <!-- ot note -->
                                 <form name="otForm" id="otForm" class="form-horizontal">
@@ -600,7 +750,6 @@
                                                     <input type="text" class="form-control input-sm" name="dateFollup" id="dateFollup"  />												 
                                                 </div>
                                             </div>
-
                                             <div>
                                                 Comment :
                                                 <textarea class="form-control" id="comment" name="comment" rows="2" placeholder="Comment"></textarea>
@@ -612,7 +761,6 @@
                                             </div>
                                         </form>
                                     </div>
-
 
                                     <div class="col-sm-6 col-md-6">
                                         <div class="thumbnail">
@@ -646,9 +794,7 @@
 
                                 </div>
                             </div>
-
                         </div> <!-- main tab div -->
-
                     </div>
                 </div>
             </div>  

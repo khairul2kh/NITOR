@@ -26,6 +26,7 @@ import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
 import org.openmrs.module.casesummary.model.SelectPatient;
+import org.openmrs.module.casesummary.model.Slide;
 import org.openmrs.module.casesummary.util.CaseSummaryConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -57,7 +58,6 @@ public class PatientSerachInSystem {
     CaseSummaryService caseSumService;
 
     public static Integer getPatientId = 0;
-    User u = Context.getAuthenticatedUser();
 
     @RequestMapping(value = "/module/casesummary/patientSerach.htm", method = RequestMethod.GET)
     public String serachPatient(@RequestParam(value = "searchKey", required = false) String searchKey,
@@ -77,15 +77,14 @@ public class PatientSerachInSystem {
 
         PatientSearchCs ps = caseSumService.getPatientSerByPatientId(patientId);
         model.addAttribute("ps", ps);
-        
-        SelectPatient sp=null;
+
+        SelectPatient sp = null;
         sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getId(), patientId);
-        
-        if(sp==null){
-            model.addAttribute("check","true");
-        }
-        else {
-            model.addAttribute("check","false");
+
+        if (sp == null) {
+            model.addAttribute("check", "true");
+        } else {
+            model.addAttribute("check", "false");
         }
 
         Concept ipdList = Context.getConceptService().getConceptByName(CaseSummaryConstants.IPD_WARD_LIST);
@@ -114,6 +113,7 @@ public class PatientSerachInSystem {
             @RequestParam(value = "unit", required = false) String unit, Model model) {
 
         //System.out.println("*************patientid=" + patientId);
+        User u = Context.getAuthenticatedUser();
         Patient patient = Context.getPatientService().getPatient(patientId);
 
         getPatientId = patientId;
@@ -161,6 +161,7 @@ public class PatientSerachInSystem {
             Model model) {
 
         System.out.println("*****************" + getPatientId);
+        User u = Context.getAuthenticatedUser();
 
         SelectPatient sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getUserId(), getPatientId);
         String fullName = sp.getId() + "-" + getPatientId + "pId";
@@ -178,6 +179,7 @@ public class PatientSerachInSystem {
     public boolean saveFilePatient(MultipartFile multipartFile, HttpServletRequest request) {
         String fileLocation = request.getSession().getServletContext().getRealPath("/imageFolder/");
         boolean result = false;
+        User u = Context.getAuthenticatedUser();
         String fileName = multipartFile.getOriginalFilename();
         File pathFile = new File(fileLocation);
         if (!pathFile.exists()) {
@@ -205,7 +207,8 @@ public class PatientSerachInSystem {
     public String selectedPatientSingle(@RequestParam("patientId") int patientId,
             @RequestParam(value = "id", required = false) int id,
             ModelMap model) {
-        //User u = Context.getAuthenticatedUser();
+        
+        User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
         SelectPatient sp = null;
         if (id == 0) {
@@ -220,12 +223,16 @@ public class PatientSerachInSystem {
         model.addAttribute("sf", sf);
         List<OtNote> listOtNote = caseSumService.listOtNote(sp.getId());
         model.addAttribute("listOtNote", listOtNote);
+        
+        List<Slide> listSlide=caseSumService.listSlideBySelPatId(id);
+        model.addAttribute("listSlide", listSlide);
+               
         return "module/casesummary/patientSearch/selectedPatientSingle";
     }
 
     @RequestMapping(value = "/module/casesummary/selectedPatientList.htm", method = RequestMethod.GET)
     public String selectedPatientList(ModelMap model) {
-        //User u = Context.getAuthenticatedUser();
+        User u = Context.getAuthenticatedUser();
         model.addAttribute("u", u);
         int userId = u.getUserId();
 

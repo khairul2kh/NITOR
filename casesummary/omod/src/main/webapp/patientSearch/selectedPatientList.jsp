@@ -35,11 +35,11 @@
             if (SESSION.checkSession()) {
                 $(document).ready(function() {
 
-                    $(".sailentfet").click(function() { // Click to only happen on announce links
-                        $("#patientId").val($(this).data('id'));
-                        $('#sailentFeature').modal({backdrop: 'static', keyboard: false});
-                        $('#sailentFeature').modal('show');
-                    });
+                    // $(".sailentfet").click(function() { // Click to only happen on announce links
+                    // $("#patientId").val($(this).data('id'));
+                    // $('#sailentFeature').modal({backdrop: 'static', keyboard: false});
+                    // $('#sailentFeature').modal('show');
+                    // });
 
                     $(".slide").click(function() { // Click to only happen on announce links
                         $("#patientId1").val($(this).data('id'));
@@ -107,6 +107,36 @@
         <!-- Main Body Start Here -->
         <div class="container theme-showcase" role="main" ng-controller="UserController">
 
+            <div class="panel panel-info">
+                <div class="panel-heading">Serach Patient all ready in Selected</div>
+                <div class="panel-body"> 
+                    <form class="form-horizontal"  >
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label class="control-label" for="presentationDate"> Search By Date </label>
+                                <input type="text" class="form-control" name="presentationDate" id="presentationDate" />
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="control-label" for="patientIdent"> Search By Patient ID </label>
+                                <input type="text" class="form-control" name="patientIdent" id="patientIdent" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="control-label" for="patientName"> Search By Patient Name </label>
+                                <input type="text" class="form-control" name="patientName" id="patientName" />
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="control-label" for="contactNo"> Search By Contact No </label>
+                                <input type="text" class="form-control" name="contactNo" id="contactNo" />
+                            </div>
+                            <div class="col-sm-3">
+                                <br>
+                                <input type="button" onclick="alert('Work will be completed soon!! Thanks');" value="Show"  class="btn btn-primary" name="btnShow" id="btnShow" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="panel panel-success" ng-controller="UserController">
                 <div class="panel-heading">Selected Patient List</div>
                 <div class="panel-body"> 
@@ -134,7 +164,7 @@
                                             <c:set var="age" value="${h.value}"/>
                                         </c:if>
                                     </c:forEach>
-                                    <tr >
+                                    <tr title="${sp.id}">
                                         <td> ${index.count}</td>
                                         <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${sp.patientId.patientIdentifier.identifier}</td>
                                         <td onclick="selectPatientSingle(${sp.patientId.personId},${sp.id});"> ${sp.patientId.givenName} ${sp.patientId.middleName} ${sp.patientId.familyName}</td>
@@ -157,44 +187,6 @@
         </div>   
 
         <!-- modal for sailent feature -->
-        <div class="modal fade" id="sailentFeature" role="dialog"  >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h2 class="modal-title"> Salient Feature </h2>
-                    </div>
-                    <div class="modal-body" ng-controller="UserController">
-                        <form name="myForm" id="myForm" class="form-horizontal">
-                            <input type=" " value="" id="patientId" ng-model="patientId" />
-                            <div class="form-group">
-
-                                <div class="col-sm-12">
-                                    <textarea class="form-control" rows="8" name="sailentFet" id="sailentFet" placeholder="Add Salient Feature"required ></textarea>
-                                    <div class="has-error" ng-show="myForm.$dirty">
-                                        <span ng-show="myForm.doctorName.$error.required">This is a required field</span>
-                                        <span ng-show="myForm.doctorName.$erength">Minimum length required is 3</span>
-                                        <span ng-show="myForm.doctorName.$invalid">This field is invalid </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="col-sm-8 left ">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-                                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
-                                    </button>
-                                    <button onclick="saveSailent()"  class="btn btn-primary" data-dismiss="modal" ng-disabled="myForm.$invalid">
-                                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
-                                    </button>
-                                </div>
-                            </div> 
-
-                        </form>
-                    </div>
-                    <!-- <button type="submit" class="btn btn-default" ng-click="submit()"  >Save</button>  -->
-                </div>
-            </div>
-        </div>
 
         <div class="modal fade" id="slideForm" role="dialog" >
             <div class="modal-dialog">
