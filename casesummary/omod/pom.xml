@@ -84,7 +84,6 @@
         </dependency>-->
         		
         <!-- End OpenMRS core -->
-        
     </dependencies>
 
     <build>

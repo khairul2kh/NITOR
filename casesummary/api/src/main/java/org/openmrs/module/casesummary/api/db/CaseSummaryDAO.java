@@ -68,4 +68,7 @@ public interface CaseSummaryDAO {
 
     public List<FollowUp> listFollUpBySelPatId(int id) throws DAOException;
     
+    public List<SelectPatient> listSelectPatientBySearch(Date date, String patientId, String patientName, String contactNo) throws DAOException;
+    
+    public List<SelectPatient> listSelPatByIdName(String patientId, String patientName, String contactNo, String diagnosis) throws DAOException;
 }

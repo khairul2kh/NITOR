@@ -31,6 +31,13 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/scripts/jque
 <script type="text/javascript"
 src="${pageContext.request.contextPath}/moduleResources/casesummary/scripts/common-utils.js"></script>
 
+<script type="text/javascript"
+src="${pageContext.request.contextPath}/moduleResources/casesummary/scripts/imageRotate.js"></script>
+
+<link type="text/css" rel="stylesheet"	
+      href="${pageContext.request.contextPath}/moduleResources/casesummary/styles/imgRotate.css"/>
+
+
 <link type="text/css" rel="stylesheet"	
       href="${pageContext.request.contextPath}/moduleResources/casesummary/scripts/jquery/css/jquery.autocomplete.css"/>
 <link type="text/css" rel="stylesheet"	

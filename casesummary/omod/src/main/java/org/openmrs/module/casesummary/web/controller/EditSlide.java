@@ -76,8 +76,6 @@ public class EditSlide {
         System.out.println("**********" + id);
 
         slideId = id;
-
-        //return "module/casesummary/thickbox/success_1";
     }
 
     @RequestMapping(value = "/module/casesummary/pictureUpdate.htm", method = RequestMethod.POST)

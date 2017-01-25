@@ -227,4 +227,50 @@ public class HibernateCaseSummaryDAO implements CaseSummaryDAO {
         return criteria.list();
     }
 
+    // this not use    
+    @Override
+    public List<SelectPatient> listSelectPatientBySearch(Date date, String patientId, String patientName, String contactNo) throws DAOException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startDate = sdf.format(date) + " 00:00:00";
+        String endDate = sdf.format(date) + " 23:59:59";
+
+        String hql = null;
+
+        hql = "from SelectPatient cs where cs.patientId.patientId IN "
+                + "(SELECT ps.patientId FROM PatientSearchCs ps where ps.fullname LIKE '%" + patientName + "%'"
+                + "OR ps.identifier LIKE '%" + patientId + " % '"
+                + ") OR ( cs.contactNo LIKE '%" + contactNo + "%' OR cs.presentationDate BETWEEN '"
+                + startDate
+                + "' AND '"
+                + endDate
+                + " )";
+
+        Session session = sessionFactory.getCurrentSession();
+        Query q = session.createQuery(hql);
+        q.setFirstResult(0);
+        q.setMaxResults(50);
+
+        List<SelectPatient> list = q.list();
+        return list;
+
+    }
+
+    @Override
+    public List<SelectPatient> listSelPatByIdName(String patientId, String patientName, String contactNo, String diagnosis) throws DAOException {
+        String hql = null;
+
+        hql = "from SelectPatient cs where cs.patientId.patientId IN "
+                + "(SELECT ps.patientId FROM PatientSearchCs ps where ps.fullname LIKE '%" + patientName + "%'"
+                + "AND ps.identifier LIKE '%" + patientId + "%'"
+                + ") AND cs.contactNo LIKE '%" + contactNo + "%' AND cs.diagnosis LIKE '%" + diagnosis + "%'";
+
+        Session session = sessionFactory.getCurrentSession();
+        Query q = session.createQuery(hql);
+        q.setFirstResult(0);
+        q.setMaxResults(50);
+
+        List<SelectPatient> list = q.list();
+        return list;
+    }
+
 }

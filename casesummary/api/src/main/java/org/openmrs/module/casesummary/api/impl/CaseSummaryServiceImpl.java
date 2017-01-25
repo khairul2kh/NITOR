@@ -153,4 +153,14 @@ public class CaseSummaryServiceImpl extends BaseOpenmrsService implements CaseSu
         return dao.listFollUpBySelPatId(id);
     }
 
+    @Override
+    public List<SelectPatient> listSelectPatientBySearch(Date date, String patientId, String patientName, String contactNo) throws APIException {
+        return dao.listSelectPatientBySearch(date, patientId, patientName, contactNo);
+    }
+
+    @Override
+    public List<SelectPatient> listSelPatByIdName(String patientId, String patientName, String contactNo, String diagnosis) throws APIException {
+        return dao.listSelPatByIdName(patientId, patientName, contactNo, diagnosis);
+    }
+
 }

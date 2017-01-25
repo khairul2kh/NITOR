@@ -40,7 +40,6 @@
                     $scope.ShowHide = function(index) {
                         $scope.IsVisible = $scope.IsVisible ? false : true;
                     };
-                    $scope.sf = "${sf.sailentFeature}";
                 }]);
 
             if (SESSION.checkSession()) {
@@ -48,12 +47,12 @@
                     jQuery('#otDate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
                     jQuery('#dateSurgery').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
                     jQuery('#dateFollup').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
-
-                    $(".sailentfet").click(function() { // Click to only happen on announce links
-                        $("#patientId").val($(this).data('id'));
-                        $('#sailentFeature').modal({backdrop: 'static', keyboard: false});
-                        $('#sailentFeature').modal('show');
-                    });
+//
+//                    $(".sailentfet").click(function() { // Click to only happen on announce links
+//                        $("#patientId").val($(this).data('id'));
+//                        $('#sailentFeature').modal({backdrop: 'static', keyboard: false});
+//                        $('#sailentFeature').modal('show');
+//                    });
 
                     $(".slide").click(function() { // Click to only happen on announce links
                         $("#slideId").val($(this).data('id'));
@@ -452,6 +451,8 @@
                                     <li><a role="menuitem" tabindex="-1" href="main.form" 
                                            data-backdrop="static" data-keyboard="false"> Main </a></li>
                                     </c:if>
+                                <li><a role="menuitem" tabindex="-1" href="selectedPatientList.htm" 
+                                       data-backdrop="static" data-keyboard="false"> Back </a></li>
                                 <li role="presentation" class="divider"></li>
                                 <li><a role="menuitem" tabindex="-1" href='${pageContext.request.contextPath}/logout'>
                                         <span class="glyphicon glyphicon-log-out"></span>&nbsp; Log Out</a></li>
@@ -510,7 +511,9 @@
                                     <input type="hidden" id="id" name="id" value="${sp.id}" />
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <textarea class="form-control" rows="8" name="sailentFet" id="sailentFet" placeholder="Add Salient Feature" required >{{sf}}</textarea>
+                                            <textarea class="form-control" rows="8" name="sailentFet" id="sailentFet" placeholder="Add Salient Feature" required >
+                                                ${sf.sailentFeature}
+                                            </textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -572,12 +575,12 @@
                                         Slide List :
                                         <table class="table table-bordered" style="font-size:12px;">
                                             <tr>
-                                                <td >#</td>
-                                                <td >Diagnosis</td>
-                                                <td >Plan</td>
-                                                <td >Picture one</td>
-                                                <td >Picture two</td>
-                                                <td >Action</td>
+                                                <th >#</th>
+                                                <th>Diagnosis</th>
+                                                <th >Plan</th>
+                                                <td >Picture one</th>
+                                                <th>Picture two</th>
+                                                <th >Action</th>
                                             </tr>
                                             <tbody>
                                                 <c:forEach items="${listSlide}" var="slide" varStatus="index" >
@@ -589,18 +592,26 @@
                                                         <td width="20%"> 
                                                             <c:if test="${not empty slide.imgNameOne}">
                                                                 <img class="example-image1" src="${pageContext.request.contextPath}/imageFolder/${slide.imgNameOne}" 
-                                                                     alt="image-1" width="70px;" height="70px;" />  
+                                                                     alt="image-1" width="50px;" height="50px;" />  
                                                             </c:if>
                                                         </td>
                                                         <td width="20%"> 
                                                             <c:if test="${not empty slide.imgNameTwo}">
                                                                 <img class="example-image1" src="${pageContext.request.contextPath}/imageFolder/${slide.imgNameTwo}" 
-                                                                     alt="image-1" width="70px;" height="70px;" /> 
+                                                                     alt="image-1" width="50px;" height="50px;" /> 
                                                             </c:if>
                                                         </td>
                                                         <td> 
-                                                            <button class="btn btn-success btn-sm slide" data-toggle="modal" data-backdrop="static" data-keyboard="false"
-                                                                    data-id="${slide.id}" >Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                            <c:if test="${slide.creator eq u.userId}">
+                                                                <button class="btn btn-success btn-sm slide" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+                                                                        data-id="${slide.id}" >Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                                </c:if>
+
+                                                            <c:if test="${slide.creator ne u.userId}">
+                                                                <button class="btn btn-success btn-sm slide" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+                                                                        data-id="${slide.id}" disabled >Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                                </c:if>
+
                                                         </td>
                                                     </tr>
 

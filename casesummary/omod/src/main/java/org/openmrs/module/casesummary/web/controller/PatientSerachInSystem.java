@@ -224,7 +224,7 @@ public class PatientSerachInSystem {
         List<OtNote> listOtNote = caseSumService.listOtNote(sp.getId());
         model.addAttribute("listOtNote", listOtNote);
         
-        List<Slide> listSlide=caseSumService.listSlideBySelPatId(id);
+        List<Slide> listSlide=caseSumService.listSlideBySelPatId(sp.getId());
         model.addAttribute("listSlide", listSlide);
                
         return "module/casesummary/patientSearch/selectedPatientSingle";

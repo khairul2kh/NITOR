@@ -18,28 +18,36 @@
                 font-weight:normal;
             }
             .form-control{color:black;}
+            .pointer{cursor:pointer;}
         </style>
 
         <script>
             var myApp = angular.module("myApp", []);
             myApp.controller('UserController', ['$scope', '$http', function($scope, $http) {
-
                     $scope.IsVisible = false;
                     $scope.ShowHide = function(index) {
                         $scope.IsVisible = $scope.IsVisible ? false : true;
-
                     };
-
                 }]);
 
             if (SESSION.checkSession()) {
                 $(document).ready(function() {
 
-                    // $(".sailentfet").click(function() { // Click to only happen on announce links
-                    // $("#patientId").val($(this).data('id'));
-                    // $('#sailentFeature').modal({backdrop: 'static', keyboard: false});
-                    // $('#sailentFeature').modal('show');
-                    // });
+                    jQuery(":input").keyup(function(event) {
+                        if (event.keyCode == 13) {
+                            getResult();
+                        }
+                    });
+
+                    $('.form_date').datetimepicker({
+                        weekStart: 1,
+                        todayBtn: 1,
+                        autoclose: 1,
+                        todayHighlight: 1,
+                        startView: 2,
+                        minView: 2,
+                        forceParse: 0
+                    });
 
                     $(".slide").click(function() { // Click to only happen on announce links
                         $("#patientId1").val($(this).data('id'));
@@ -51,16 +59,52 @@
             }
 
             function selectPatientSingle(patientId, id) {
-                // alert(patientId);
                 window.location.href = openmrsContextPath + "/module/casesummary/selectedPatientSingle.htm?patientId=" + patientId + "&id=" + id;
             }
             ;
             function mainPage() {
-                // alert(patientId);
                 window.location.href = openmrsContextPath + "/module/casesummary/main.form";
             }
             ;
+
+            function getResult() {
+                jQuery("#spl").hide();
+                jQuery("#viewResult").show();
+
+                var patientName = document.getElementById("serarchForm").elements[0].value;
+                var patientId = document.getElementById("serarchForm").elements[1].value;
+                var contactNo = document.getElementById("serarchForm").elements[2].value;
+                var diagnosis = document.getElementById("serarchForm").elements[3].value;
+
+                jQuery.ajax({
+                    type: "GET",
+                    url: getContextPath() + "/module/casesummary/selectedPatientSerach.htm",
+                    data: ({
+                        diagnosis: diagnosis,
+                        patientId: patientId,
+                        patientName: patientName,
+                        contactNo: contactNo
+                    }),
+                    success: function(data) {
+                        jQuery("#viewResult").html(data);
+                    },
+                    error: function(data) {
+                        jQuery("#viewResult").html(data);
+                    }
+                });
+            }
+            ;
+            function show() {
+                jQuery("#spl").show();
+                jQuery("#viewResult").hide();
+                jQuery(":input").val("");
+            }
+
         </script>
+        <script type="text/javascript"
+        src="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+        <link type="text/css" rel="stylesheet"
+              href="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.min.css"/>
     </head>
 
     <body ng-app="myApp"  class="ng-cloak tdn" >
@@ -110,34 +154,46 @@
             <div class="panel panel-info">
                 <div class="panel-heading">Serach Patient all ready in Selected</div>
                 <div class="panel-body"> 
-                    <form class="form-horizontal"  >
+                    <form class="form-horizontal" id="serarchForm" >
                         <div class="form-group">
-                            <div class="col-sm-2">
-                                <label class="control-label" for="presentationDate"> Search By Date </label>
-                                <input type="text" class="form-control" name="presentationDate" id="presentationDate" />
-                            </div>
-                            <div class="col-sm-2">
-                                <label class="control-label" for="patientIdent"> Search By Patient ID </label>
-                                <input type="text" class="form-control" name="patientIdent" id="patientIdent" />
-                            </div>
+                            <!--  <div class="col-sm-2">
+                                    <label class="control-label" for="presentationDate"> Search By Date </label>
+                                    <input type="text" data-date-format="dd/mm/yyyy" data-link-field="dtp_input2" data-link-format="dd/mm/yyyy"
+                                       name="presentationDate" id="presentationDate" class="form_date form-control pointer" value="" /> 
+                                       </div>-->
                             <div class="col-sm-3">
                                 <label class="control-label" for="patientName"> Search By Patient Name </label>
                                 <input type="text" class="form-control" name="patientName" id="patientName" />
                             </div>
                             <div class="col-sm-2">
+                                <label class="control-label" for="patientIdent"> Search By Patient ID </label>
+                                <input type="text" class="form-control" name="patientIdent" id="patientIdent" />
+                            </div>
+                            <div class="col-sm-2">
                                 <label class="control-label" for="contactNo"> Search By Contact No </label>
                                 <input type="text" class="form-control" name="contactNo" id="contactNo" />
                             </div>
+                            <div class="col-sm-2">
+                                <label class="control-label" for="diagnosis"> Diagnosis </label>
+                                <input type="text" class="form-control" name="diagnosis" id="diagnosis" />
+                            </div>
                             <div class="col-sm-3">
                                 <br>
-                                <input type="button" onclick="alert('Work will be completed soon!! Thanks');" value="Show"  class="btn btn-primary" name="btnShow" id="btnShow" />
+                                <button onclick="getResult();" value="Search"  class="btn btn-primary" name="btnShow" id="btnShow" >
+                                    <i class="fa fa-search" aria-hidden="true"></i> Search  
+                                </button>
+                                &emsp;&emsp;
+                                <button onclick="show();" value="Show"  class="btn btn-warning"> Show </button>
                             </div>
+
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div class="panel panel-success" ng-controller="UserController">
+            <div id="viewResult" style="padding:4px;"></div>
+
+            <div class="panel panel-success" ng-controller="UserController" id="spl">
                 <div class="panel-heading">Selected Patient List</div>
                 <div class="panel-body"> 
 

@@ -68,5 +68,9 @@ public interface CaseSummaryService extends OpenmrsService {
     public FollowUp getFollowUpById(int id) throws APIException;
 
     public List<FollowUp> listFollUpBySelPatId(int id) throws APIException;
+    
+    public List<SelectPatient> listSelectPatientBySearch(Date date, String patientId, String patientName, String contactNo) throws APIException;
+    
+    public List<SelectPatient> listSelPatByIdName(String patientId, String patientName, String contactNo, String diagnosis) throws APIException;
 
 }
