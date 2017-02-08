@@ -203,32 +203,28 @@ public class PatientSerachInSystem {
         return result;
     }
 
-    @RequestMapping(value = "/module/casesummary/selectedPatientSingle.htm", method = RequestMethod.GET)
-    public String selectedPatientSingle(@RequestParam("patientId") int patientId,
-            @RequestParam(value = "id", required = false) int id,
-            ModelMap model) {
-        
-        User u = Context.getAuthenticatedUser();
-        model.addAttribute("u", u);
-        SelectPatient sp = null;
-        if (id == 0) {
-            sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getId(), patientId);
-        } else {
-            sp = caseSumService.getSelPatientById(id);
-        }
-
-        model.addAttribute("sp", sp);
-        model.addAttribute("age", sp.getPatientId().getAge());
-        SailentFeature sf = caseSumService.getSailentById(sp.getId());
-        model.addAttribute("sf", sf);
-        List<OtNote> listOtNote = caseSumService.listOtNote(sp.getId());
-        model.addAttribute("listOtNote", listOtNote);
-        
-        List<Slide> listSlide=caseSumService.listSlideBySelPatId(sp.getId());
-        model.addAttribute("listSlide", listSlide);
-               
-        return "module/casesummary/patientSearch/selectedPatientSingle";
-    }
+//    @RequestMapping(value = "/module/casesummary/selectedPatientSingle.htm", method = RequestMethod.GET)
+//    public String selectedPatientSingle(@RequestParam("patientId") int patientId,
+//            @RequestParam(value = "id", required = false) int id,
+//            ModelMap model) {
+//        User u = Context.getAuthenticatedUser();
+//        model.addAttribute("u", u);
+//        SelectPatient sp = null;
+//        if (id == 0) {
+//            sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getId(), patientId);
+//        } else {
+//            sp = caseSumService.getSelPatientById(id);
+//        }
+//        model.addAttribute("sp", sp);
+//        model.addAttribute("age", sp.getPatientId().getAge());
+//        SailentFeature sf = caseSumService.getSailentById(sp.getId());
+//        model.addAttribute("sf", sf);
+//        List<OtNote> listOtNote = caseSumService.listOtNote(sp.getId());
+//        model.addAttribute("listOtNote", listOtNote);
+//        List<Slide> listSlide=caseSumService.listSlideBySelPatId(sp.getId());
+//        model.addAttribute("listSlide", listSlide);
+//        return "module/casesummary/patientSearch/selectedPatientSingle";
+//    }
 
     @RequestMapping(value = "/module/casesummary/selectedPatientList.htm", method = RequestMethod.GET)
     public String selectedPatientList(ModelMap model) {

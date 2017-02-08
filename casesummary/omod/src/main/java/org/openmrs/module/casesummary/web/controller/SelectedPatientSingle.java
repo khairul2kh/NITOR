@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import liquibase.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -23,6 +22,7 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.casesummary.api.CaseSummaryService;
 import org.openmrs.module.casesummary.model.DoctorProfile;
+import org.openmrs.module.casesummary.model.FollowUp;
 import org.openmrs.module.casesummary.model.OtNote;
 import org.openmrs.module.casesummary.model.PatientSearchCs;
 import org.openmrs.module.casesummary.model.SailentFeature;
@@ -45,44 +45,45 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.openmrs.module.casesummary.util.CSUtil;
 
 /**
  *
  * @author Khairul
  */
 @Controller
-public class SelectedPatientSearch {
-
-    protected final Log log = LogFactory.getLog(getClass());
+public class SelectedPatientSingle {
 
     @Autowired
     CaseSummaryService caseSumService;
 
-    @RequestMapping(value = "/module/casesummary/selectedPatientSerach.htm", method = RequestMethod.GET)
-    public String selectedPatientSerarch(//@RequestParam(value = "sDate", required = false) String sDate,
-            @RequestParam(value = "diagnosis", required = false) String diagnosis,
-            @RequestParam(value = "patientId", required = false) String patientId,
-            @RequestParam(value = "patientName", required = false) String patientName,
-            @RequestParam(value = "contactNo", required = false) String contactNo,
+    @RequestMapping(value = "/module/casesummary/selectedPatientSingle.htm", method = RequestMethod.GET)
+    public String selectedPatientSingle(@RequestParam("patientId") int patientId,
+            @RequestParam(value = "id", required = false) int id,
             ModelMap model) {
 
-        String dia = CSUtil.validationDia(diagnosis);
-        String paId = CSUtil.validationPaId(patientId);
-        String paName = CSUtil.validationPaName(patientName);
-        String contNo = CSUtil.validationConNo(contactNo);
+        User u = Context.getAuthenticatedUser();
+        model.addAttribute("u", u);
+        SelectPatient sp = null;
+        if (id == 0) {
+            sp = caseSumService.getSelectPatiByPatientIdUsreId(u.getId(), patientId);
+        } else {
+            sp = caseSumService.getSelPatientById(id);
+        }
 
-        List<SelectPatient> listSelPat = caseSumService.listSelPatByIdName(patientId, paName, contNo, dia);
-        model.addAttribute("listSelPat", listSelPat);
-        System.out.println("******** listSelPat " + listSelPat.size());
-        return "module/casesummary/ajax/selPatSearch";
+        model.addAttribute("sp", sp);
+        model.addAttribute("age", sp.getPatientId().getAge());
+        SailentFeature sf = caseSumService.getSailentById(sp.getId());
+        model.addAttribute("sf", sf);
+        List<OtNote> listOtNote = caseSumService.listOtNote(sp.getId());
+        model.addAttribute("listOtNote", listOtNote);
+
+        List<Slide> listSlide = caseSumService.listSlideBySelPatId(sp.getId());
+        model.addAttribute("listSlide", listSlide);
+        
+        List<FollowUp> listFollUp = caseSumService.listFollUpBySelPatId(sp.getId());
+        model.addAttribute("listFollUp", listFollUp);
+
+        return "module/casesummary/patientSearch/selectedPatientSingle";
     }
-}
 
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//        Date date = null;
-//        try {
-//            date = sdf.parse(sDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+}

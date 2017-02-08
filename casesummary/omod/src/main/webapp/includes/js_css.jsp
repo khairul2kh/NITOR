@@ -92,6 +92,6 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/assets/css/b
 <link type="text/css" rel="stylesheet"
       href="${pageContext.request.contextPath}/moduleResources/casesummary/styles/billForm.css"/>
 
-<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/moduleResources/hospitalcore/scripts/jquery/css/thickbox.css" /> 
-<script type="text/javascript" src="${pageContext.request.contextPath}/moduleResources/hospitalcore/scripts/jquery/jquery.thickbox.js"></script> 
+<!--<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/moduleResources/hospitalcore/scripts/jquery/css/thickbox.css" /> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/moduleResources/hospitalcore/scripts/jquery/jquery.thickbox.js"></script> -->
 

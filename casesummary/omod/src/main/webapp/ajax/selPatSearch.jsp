@@ -10,15 +10,16 @@
 
 <c:choose>
     <c:when test="${not empty listSelPat}"> 
-        <table class="table table-bordered table-hover" style="cursor:pointer;">
+        <table class="table table-bordered table-hover" style="cursor:pointer; font-size:13px;">
             <tr>
-                <td >#</td>
-                <td >Patient Name</td>
-                <td >ID</td>
-                <td >Diagnosis</td>
-                <td >Name of Presenter</td>
-                <td >Contact No</td>
-                <td > Status </td>
+                <th >#</th>
+                <th>Patient Name</th>
+                <th >ID</th>
+                <th >Diagnosis</th>
+                <th >Presenter</th>
+                <th >Contact No</th>
+                <th > Status </th>
+                <th > Pres. Date </th>
             </tr>
             <tbody>
                 <c:forEach items="${listSelPat}" var="sp" varStatus="index" >
@@ -37,6 +38,7 @@
                                 <i class="glyphicon glyphicon-eye-close fa-2x" aria-hidden="true"> </i>
                             </c:if>
                         </td>
+                        <td> <fmt:formatDate value="${sp.presentationDate}" pattern="MM/dd/yyyy"/> </td>
                     </tr>
                 </c:forEach>
             </tbody>

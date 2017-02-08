@@ -52,12 +52,22 @@
                 $(document).ready(function() {
                     jQuery('#pdate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
                     //jQuery('#reDate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true});
-                    jQuery('#reDate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true, minDate: '0'});
+                    //jQuery('#reDate').datepicker({yearRange: 'c-30:c+30', dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true, minDate: '0'});
 
                     jQuery("#pdate").keyup(function(event) {
                         if (event.keyCode == 13) {
                             getSelectPatient();
                         }
+                    });
+
+                    $('.form_date').datetimepicker({
+                        weekStart: 1,
+                        todayBtn: 1,
+                        autoclose: 1,
+                        todayHighlight: 1,
+                        startView: 2,
+                        minView: 2,
+                        forceParse: 0
                     });
 
                     getSelectPatient();
@@ -182,13 +192,13 @@
 
             function goPresentation(id) {
                 // alert(patientId);
-                window.location.href = openmrsContextPath + "/module/casesummary/selectPatientSlide.htm?id=" + id;
+                window.location.href = openmrsContextPath + "/module/casesummary/selectPatientSlide.htm?id=" + id +"&view="+0;
             }
             ;
 
             function createPatient() {
                 // alert(patientId);
-                window.location.href = openmrsContextPath + "/findPatient.htm?d="+1;
+                window.location.href = openmrsContextPath + "/findPatient.htm?d=" + 1;
             }
             ;
 
@@ -202,6 +212,10 @@
 
         </script>
 
+        <script type="text/javascript"
+        src="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+        <link type="text/css" rel="stylesheet"
+              href="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.min.css"/>
     </head>
 
     <body ng-app="myApp"  class="ng-cloak tdn">
@@ -494,9 +508,11 @@
                     <form class="form-horizontal">
                         <div class="modal-body">
                             <input id="patientId1" name="patientId1" type="hidden" id="patientId1" />
-                            <input type="text" class="date-pick" id="reDate" placeholder="Presentation Date" />
-
-
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-2">
+                                <input type="text" data-date-format="dd/mm/yyyy" data-link-field="dtp_input2" data-link-format="dd/mm/yyyy"
+                                       placeholder="Select Presentation Date"  id="reDate" name="reDate"  class="form_date pointer" value="" /> 
+                            </div>		
                         </div>
                         <div class="modal-footer">
                             <button onclick="reschedulePresentation()"  class="btn btn-primary" data-dismiss="modal" ng-disabled="myForm.$invalid">

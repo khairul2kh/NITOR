@@ -39,15 +39,19 @@
                         }
                     });
 
-                    $('.form_date').datetimepicker({
-                        weekStart: 1,
-                        todayBtn: 1,
-                        autoclose: 1,
-                        todayHighlight: 1,
-                        startView: 2,
-                        minView: 2,
-                        forceParse: 0
+                    jQuery(":input").keyup(function(event) {
+                        getResult();
                     });
+
+//                    $('.form_date').datetimepicker({
+//                        weekStart: 1,
+//                        todayBtn: 1,
+//                        autoclose: 1,
+//                        todayHighlight: 1,
+//                        startView: 2,
+//                        minView: 2,
+//                        forceParse: 0
+//                    });
 
                     $(".slide").click(function() { // Click to only happen on announce links
                         $("#patientId1").val($(this).data('id'));
@@ -101,10 +105,10 @@
             }
 
         </script>
-        <script type="text/javascript"
-        src="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-        <link type="text/css" rel="stylesheet"
-              href="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.min.css"/>
+        <!--        <script type="text/javascript"
+                src="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+                <link type="text/css" rel="stylesheet"
+                      href="${pageContext.request.contextPath}/moduleResources/casesummary/dt/bootstrap-datetimepicker.min.css"/>-->
     </head>
 
     <body ng-app="myApp"  class="ng-cloak tdn" >

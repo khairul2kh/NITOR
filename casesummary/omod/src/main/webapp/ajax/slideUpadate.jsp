@@ -30,7 +30,7 @@
 
     <div class="col-sm-6 col-md-6">
         <div class="thumbnail">
-            <form  id="picFormUpdate" name="picFormUpdate" enctype="multipart/form-data">  
+            <form  id="picFormUpdate" name="picFormUpdateFollUp" enctype="multipart/form-data">  
                 <input type="file" id="imgInpEdit1" name="imgInpEdit1" style="display: ;" /><br>
                 <img id="imgEdit1" class="example-image1" src="${pageContext.request.contextPath}/imageFolder/${s.imgNameOne}" 
                      alt="Selected Picture" width="70px;" height="70px;" />

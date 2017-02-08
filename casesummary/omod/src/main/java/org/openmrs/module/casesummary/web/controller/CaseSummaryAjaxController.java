@@ -243,39 +243,39 @@ public class CaseSummaryAjaxController {
         return "module/casesummary/presentation/finalPresentationList";
     }
 
-    @RequestMapping(value = "/module/casesummary/selectPatientSlide.htm", method = RequestMethod.GET)
-    public String selectPatientSlide(@RequestParam(value = "id", required = false) int id,
-            ModelMap model) {
-        User u = Context.getAuthenticatedUser();
-        model.addAttribute("u", u);
-
-        SelectPatient sp = caseSumService.getSelPatientById(id);
-        model.addAttribute("sp", sp);
-        model.addAttribute("age", sp.getPatientId().getAge());
-        model.addAttribute("sex", sp.getPatientId().getGender());
-
-        System.out.println("userId*********" + sp.getUserId().getId());
-
-        DoctorProfile dp = caseSumService.docProFindByUserId(sp.getUserId().getId());
-        model.addAttribute("dp", dp);
-
-        SailentFeature sf = caseSumService.getSailentById(id);
-        model.addAttribute("sf", sf);
-
-        List<Slide> listSlide = caseSumService.listSlideBySelPatId(id);
-        model.addAttribute("listSlide", listSlide);
-
-        List<OtNote> otNote = caseSumService.listOtNote(id);
-        model.addAttribute("listOtNote", otNote);
-
-        List<FollowUp> listFollUp = caseSumService.listFollUpBySelPatId(id);
-        model.addAttribute("listFollUp", listFollUp);
-
-        sp.setStatus(true);
-        caseSumService.saveSlectPatient(sp);
-
-        return "module/casesummary/presentation/readyPresentation";
-    }
+//    @RequestMapping(value = "/module/casesummary/selectPatientSlide.htm", method = RequestMethod.GET)
+//    public String selectPatientSlide(@RequestParam(value = "id", required = false) int id,
+//            ModelMap model) {
+//        User u = Context.getAuthenticatedUser();
+//        model.addAttribute("u", u);
+//
+//        SelectPatient sp = caseSumService.getSelPatientById(id);
+//        model.addAttribute("sp", sp);
+//        model.addAttribute("age", sp.getPatientId().getAge());
+//        model.addAttribute("sex", sp.getPatientId().getGender());
+//
+//        System.out.println("userId*********" + sp.getUserId().getId());
+//
+//        DoctorProfile dp = caseSumService.docProFindByUserId(sp.getUserId().getId());
+//        model.addAttribute("dp", dp);
+//
+//        SailentFeature sf = caseSumService.getSailentById(id);
+//        model.addAttribute("sf", sf);
+//
+//        List<Slide> listSlide = caseSumService.listSlideBySelPatId(id);
+//        model.addAttribute("listSlide", listSlide);
+//
+//        List<OtNote> otNote = caseSumService.listOtNote(id);
+//        model.addAttribute("listOtNote", otNote);
+//
+//        List<FollowUp> listFollUp = caseSumService.listFollUpBySelPatId(id);
+//        model.addAttribute("listFollUp", listFollUp);
+//
+//        sp.setStatus(true);
+//        caseSumService.saveSlectPatient(sp);
+//
+//        return "module/casesummary/presentation/readyPresentation";
+//    }
 
      
 }

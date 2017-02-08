@@ -54,7 +54,8 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/lightimage/l
                     var now = 0; // currently shown div
                     $("#prev").hide();
                     divs.hide().first().show();
-                    $("button[name=next]").click(function(e) {
+
+                    $("span[name=next]").click(function(e) {
                         $("#prev").show();
                         divs.eq(now).hide();
                         now = (now + 1 < divs.length) ? now + 1 : 0;
@@ -63,9 +64,11 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/lightimage/l
                             console.log(divs.length, now + 1);
                             $("#next").hide();
                         }
+                        console.log(now);
+                        console.log(divs.length);
                     });
 
-                    $("button[name=prev]").click(function(e) {
+                    $("span[name=prev]").click(function(e) {
                         $("#next").show();
                         divs.eq(now).hide();
                         now = (now > 0) ? now - 1 : divs.length - 1;
@@ -74,6 +77,42 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/lightimage/l
                             console.log(divs.length, now);
                             $("#prev").hide();
                         }
+                        console.log(now);
+                        console.log(divs.length);
+                    });
+
+
+                    $(document).on("keypress", function(e) {
+                        e = e || window.event;
+
+                        if (e.keyCode == '39') {
+                            //   console.log("39"); //right
+                            $("#prev").show();
+                            divs.eq(now).hide();
+                            now = (now + 1 < divs.length) ? now + 1 : 0;
+                            divs.eq(now).show(); // show next
+                            if (divs.length == now + 1) {
+                                console.log(divs.length, now + 1);
+                                $("#next").hide();
+                            }
+                            console.log(now);
+                            console.log(divs.length);
+                        }
+
+                        if (e.keyCode == '37') {
+                            // console.log("37"); //left
+                            $("#next").show();
+                            divs.eq(now).hide();
+                            now = (now > 0) ? now - 1 : divs.length - 1;
+                            divs.eq(now).show();
+                            if (now == 0) {
+                                console.log(divs.length, now);
+                                $("#prev").hide();
+                            }
+                            console.log(now);
+                            console.log(divs.length);
+                        }
+
                     });
 
                 });
@@ -131,13 +170,16 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/lightimage/l
     </nav>  -->
         <br><br>
         <!-- Main Body Start Here -->
-        <div class="container theme-showcase" role="main" ng-controller="UserController">
+        <div style="float:right"> 
+            <span  id="prev" name="prev" class="btn btn-success"> <i class="fa fa-backward" aria-hidden="true"></i>  </span>
+            <span name="next" id="next" class="btn btn-success"> <i class="fa fa-forward" aria-hidden="true"></i> </span>
+        </div>
 
+        <div class="container theme-showcase" role="main" ng-controller="UserController">		
             <div class="panel panel-info">
-                <div class="panel-body"> 
+                <div class="panel-body">
 
                     <div class="mydivs">
-
                         <div>
                             <div class="row"   id="div1">
                                 <div class="col-sm-12"> <!-- first slide Doctor Info-->
@@ -389,17 +431,16 @@ src="${pageContext.request.contextPath}/moduleResources/casesummary/lightimage/l
                                 <div class="col-sm-4 col-md-4"> </div>
                             </div>
                         </div>
-                    </div>	 
+                    </div>	
                 </div>
+
             </div> 
 
-            <div class="row col-sm-4 col-md-4">
-                <button class="btn btn-success" id="prev" name="prev"> <i class="fa fa-backward" aria-hidden="true"></i> Previous</button>
-                <button name="next" id="next" class="btn btn-success">Next <i class="fa fa-forward" aria-hidden="true"></i> </button>
-            </div>
-            <div class="row col-sm-2 col-md-2">
-                <button class="btn btn-info" onclick="mainPage()"> <i class="fa fa-th" aria-hidden="true"></i>  Presentation List </button>
-            </div>
+            <c:if test="${view eq '0'}">
+                <div class="row col-sm-2 col-md-2">
+                    <button class="btn btn-info" onclick="mainPage()"> <i class="fa fa-th" aria-hidden="true"></i>  Presentation List </button>
+                </div>
+            </c:if>
         </div>  
     </body>
 
